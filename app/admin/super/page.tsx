@@ -199,22 +199,22 @@ export default function SuperAdminDashboard() {
               <div className="text-3xl font-bold text-purple-600">{reviewedArticles.length}</div>
             </CardContent>
           </Card>
-          <Card>
+          {/* <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-gray-600">Approved</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-green-600">{approvedArticles.length}</div>
             </CardContent>
-          </Card>
-          <Card>
+          </Card> */}
+          {/* <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-gray-600">Rejected</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-red-600">{rejectedArticles.length}</div>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
 
         <Tabs defaultValue="unassigned" className="space-y-6">
@@ -225,12 +225,12 @@ export default function SuperAdminDashboard() {
             <TabsTrigger value="reviewed">
               Reviewed ({reviewedArticles.length})
             </TabsTrigger>
-            <TabsTrigger value="approved">
+            {/* <TabsTrigger value="approved">
               Approved ({approvedArticles.length})
             </TabsTrigger>
             <TabsTrigger value="rejected">
               Rejected ({rejectedArticles.length})
-            </TabsTrigger>
+            </TabsTrigger> */}
             <TabsTrigger value="reviewers">
               Reviewers ({reviewers.length})
             </TabsTrigger>
@@ -386,7 +386,7 @@ export default function SuperAdminDashboard() {
             </Card>
           </TabsContent>
 
-          {/* Approved Articles */}
+          {/* Approved Articles
           <TabsContent value="approved">
             <Card>
               <CardHeader>
@@ -425,10 +425,10 @@ export default function SuperAdminDashboard() {
                 )}
               </CardContent>
             </Card>
-          </TabsContent>
+          </TabsContent> */}
 
           {/* Rejected Articles */}
-          <TabsContent value="rejected">
+          {/* <TabsContent value="rejected">
             <Card>
               <CardHeader>
                 <CardTitle>Rejected Articles</CardTitle>
@@ -466,7 +466,7 @@ export default function SuperAdminDashboard() {
                 )}
               </CardContent>
             </Card>
-          </TabsContent>
+          </TabsContent> */}
 
           {/* Reviewers List */}
           <TabsContent value="reviewers">

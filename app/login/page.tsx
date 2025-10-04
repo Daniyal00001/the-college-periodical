@@ -15,40 +15,48 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setIsLoading(true)
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+  setError("")
+  setIsLoading(true)
 
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      })
+  try {
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    })
 
-      const data = await res.json()
+    const data = await res.json()
+    console.log("API Response:", data) // Debug log
 
-      if (!res.ok) {
-        throw new Error(data.error || "Login failed")
-      }
-
-      // Store user data and token in localStorage
-      localStorage.setItem("user", JSON.stringify(data.user))
-      localStorage.setItem("token", data.token)
-
-      // Redirect based on role
-      if (data.user.role === "super_admin") {
-        router.push("/admin/super")
-      } else {
-        router.push("/admin/reviewer")
-      }
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setIsLoading(false)
+    if (!res.ok) {
+      throw new Error(data.error || "Login failed")
     }
+
+    // Check if token exists
+    if (!data.token) {
+      console.error("No token in response!")
+    }
+
+    // Store user data and token
+    localStorage.setItem("user", JSON.stringify(data.user))
+    if (data.token) {
+      localStorage.setItem("token", data.token)
+    }
+
+    // Redirect
+    if (data.user.role === "super_admin") {
+      router.push("/admin/super")
+    } else {
+      router.push("/admin/reviewer")
+    }
+  } catch (err: any) {
+    setError(err.message)
+  } finally {
+    setIsLoading(false)
   }
+}
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center p-4">
@@ -129,12 +137,6 @@ export default function LoginPage() {
             </form>
           </CardContent>
         </Card>
-
-        {/* Test Credentials */}
-        <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded text-sm">
-          <p className="font-semibold text-yellow-800 mb-2">Test Credentials:</p>
-          <p className="text-yellow-700">Super Admin: admin@college.edu / admin123</p>
-        </div>
       </div>
     </div>
   )

@@ -1,3 +1,5 @@
+
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -39,6 +41,7 @@ type Assignment = {
   reviewer_remarks: string
   reviewer_status: string
   assigned_at: string
+  assignment_status: string
 }
 
 export default function SuperAdminDashboard() {
@@ -144,7 +147,10 @@ export default function SuperAdminDashboard() {
   }
 
   const unassignedArticles = submissions.filter(s => s.assignment_status === "unassigned")
+  const assignedArticles = submissions.filter(s => s.assignment_status === "assigned")
   const reviewedArticles = assignments.filter(a => a.reviewer_status === "reviewed")
+  const approvedArticles = submissions.filter(s => s.assignment_status === "approved")
+  const rejectedArticles = submissions.filter(s => s.assignment_status === "rejected")
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -167,13 +173,57 @@ export default function SuperAdminDashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-gray-600">Unassigned</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-yellow-600">{unassignedArticles.length}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-gray-600">Assigned</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-blue-600">{assignedArticles.length}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-gray-600">Reviewed</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-purple-600">{reviewedArticles.length}</div>
+            </CardContent>
+          </Card>
+          {/* <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-gray-600">Approved</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-green-600">{approvedArticles.length}</div>
+            </CardContent>
+          </Card> */}
+          {/* <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-gray-600">Rejected</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-red-600">{rejectedArticles.length}</div>
+            </CardContent>
+          </Card> */}
+        </div>
+
         <Tabs defaultValue="unassigned" className="space-y-6">
           <TabsList>
             <TabsTrigger value="unassigned">
-              Unassigned Articles ({unassignedArticles.length})
+              Unassigned ({unassignedArticles.length})
             </TabsTrigger>
             <TabsTrigger value="reviewed">
-              Reviewed Articles ({reviewedArticles.length})
+              Reviewed ({reviewedArticles.length})
             </TabsTrigger>
             <TabsTrigger value="reviewers">
               Reviewers ({reviewers.length})
@@ -274,48 +324,70 @@ export default function SuperAdminDashboard() {
               </CardHeader>
               <CardContent>
                 <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Title</TableHead>
-                      <TableHead>Reviewer</TableHead>
-                      <TableHead>Remarks</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {reviewedArticles.map((assignment) => (
-                      <TableRow key={assignment.id}>
-                        <TableCell className="font-medium">{assignment.title}</TableCell>
-                        <TableCell>{assignment.reviewer_name}</TableCell>
-                        <TableCell className="max-w-xs truncate">{assignment.reviewer_remarks}</TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <Button
-                              size="sm"
-                              onClick={() => handleFinalDecision(assignment.submission_id, "approved")}
-                              className="bg-green-600 hover:bg-green-700"
-                              disabled={isLoading}
-                            >
-                              <CheckCircle className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => handleFinalDecision(assignment.submission_id, "rejected")}
-                              disabled={isLoading}
-                            >
-                              <XCircle className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
+              <TableHeader>
+  <TableRow>
+    <TableHead>Title</TableHead>
+    <TableHead>Reviewer</TableHead>
+    <TableHead>Remarks</TableHead>
+    <TableHead>Status</TableHead>
+    <TableHead>Actions</TableHead>
+  </TableRow>
+</TableHeader>
+
+                <TableBody>
+  {reviewedArticles.map((assignment) => (
+    <TableRow key={assignment.id}>
+      <TableCell className="font-medium">{assignment.title}</TableCell>
+      <TableCell>{assignment.reviewer_name}</TableCell>
+      <TableCell className="max-w-xs truncate">{assignment.reviewer_remarks}</TableCell>
+      <TableCell>
+        <Badge
+          variant={
+            assignment.reviewer_status === "reviewed"
+              ? "outline"
+              : assignment.reviewer_status === "pending"
+              ? "secondary"
+              : "default"
+          }
+        >
+          {assignment.reviewer_status.charAt(0).toUpperCase() +
+            assignment.reviewer_status.slice(1)}
+        </Badge>
+      </TableCell>
+      <TableCell>
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            onClick={() => handleFinalDecision(assignment.submission_id, "approved")}
+            className="bg-green-600 hover:bg-green-700"
+            disabled={isLoading}
+          >
+            <CheckCircle className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => handleFinalDecision(assignment.submission_id, "rejected")}
+            disabled={isLoading}
+          >
+            <XCircle className="h-4 w-4" />
+          </Button>
+        </div>
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
+
                 </Table>
               </CardContent>
             </Card>
           </TabsContent>
 
+          {/* Approved Articles */}
+       
+
+          {/* Rejected Articles */}
+     
           {/* Reviewers List */}
           <TabsContent value="reviewers">
             <Card>

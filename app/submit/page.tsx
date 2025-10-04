@@ -128,7 +128,7 @@ export default function SubmitArticle() {
                   <Link href="/">
                     <Button variant="outline">
                       <ArrowLeft className="h-4 w-4 mr-2" />
-                      Back to Home
+                      Home
                     </Button>
                   </Link>
                   <Button
@@ -164,7 +164,16 @@ export default function SubmitArticle() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center">
-              <BookOpen className="h-8 w-8 text-blue-600 mr-3" />
+              {/* <BookOpen className="h-8 w-8 text-blue-600 mr-3" /> */}
+                 <img
+                src="/logo.png"
+                alt="The College Periodical Logo"
+                className="h-20 w-20 mr-2 object-contain"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                  e.currentTarget.nextElementSibling.style.display = "block";
+                }}
+              />
               <h1 className="text-2xl font-bold text-gray-900">The College Periodical</h1>
             </Link>
             <Link href="/">

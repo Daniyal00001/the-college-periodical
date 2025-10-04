@@ -132,7 +132,7 @@ export default function SignupPage() {
 
               <div className="text-center text-sm">
                 <Link href="/" className="text-gray-600 hover:underline">
-                  Back to Home
+                  Home
                 </Link>
               </div>
             </form>

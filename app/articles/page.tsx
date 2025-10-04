@@ -18,14 +18,18 @@ import {
 
 export default function ArticlesPage() {
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All")
+  const [selectedCategory, setSelectedCategory] = useState("All Categories")
+  const [selectedMonth, setSelectedMonth] = useState("All Months")
+  const [selectedYear, setSelectedYear] = useState("All Years")
   const [sortBy, setSortBy] = useState("newest")
   const [articles, setArticles] = useState<any[]>([])
   const [categories, setCategories] = useState<any[]>([])
+  const [months, setMonths] = useState<string[]>([])
+  const [years, setYears] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedArticle, setSelectedArticle] = useState<any | null>(null)
 
-  // ✅ Fetch articles
+  // ✅ Fetch articles and extract months & years
   useEffect(() => {
     const fetchArticles = async () => {
       setLoading(true)
@@ -33,6 +37,20 @@ export default function ArticlesPage() {
         const res = await fetch("/api/articles")
         const data = await res.json()
         setArticles(Array.isArray(data) ? data : [])
+
+        const monthSet = new Set<string>()
+        const yearSet = new Set<string>()
+        data.forEach((a: any) => {
+          if (a.published_at) {
+            const date = new Date(a.published_at)
+            const monthName = date.toLocaleString("default", { month: "long" })
+            monthSet.add(monthName)
+            yearSet.add(date.getFullYear().toString())
+          }
+        })
+
+        setMonths(["All Months", ...Array.from(monthSet)])
+        setYears(["All Years", ...Array.from(yearSet).sort((a, b) => Number(b) - Number(a))])
       } catch (err) {
         console.error("❌ Fetch error (articles):", err)
       } finally {
@@ -49,10 +67,10 @@ export default function ArticlesPage() {
       try {
         const res = await fetch("/api/categories")
         const data = await res.json()
-        setCategories([{ id: 0, name: "All" }, ...data])
+        setCategories([{ id: 0, name: "All Categories" }, ...data])
       } catch (err) {
         console.error("❌ Fetch error (categories):", err)
-        setCategories([{ id: 0, name: "All" }])
+        setCategories([{ id: 0, name: "All Categories" }])
       }
     }
 
@@ -68,9 +86,17 @@ export default function ArticlesPage() {
         article.author?.toLowerCase().includes(searchTerm.toLowerCase())
 
       const matchesCategory =
-        selectedCategory === "All" || article.category === selectedCategory
+        selectedCategory === "All Categories" || article.category === selectedCategory
 
-      return matchesSearch && matchesCategory
+      const date = article.published_at ? new Date(article.published_at) : null
+      const matchesMonth =
+        selectedMonth === "All Months" ||
+        (date && date.toLocaleString("default", { month: "long" }) === selectedMonth)
+
+      const matchesYear =
+        selectedYear === "All Years" || (date && date.getFullYear().toString() === selectedYear)
+
+      return matchesSearch && matchesCategory && matchesMonth && matchesYear
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -84,9 +110,9 @@ export default function ArticlesPage() {
     })
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-100">
       {/* Header */}
-      <header className="border-b bg-white shadow-sm">
+      <header className="border-b bg-white/70 backdrop-blur-sm shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center">
@@ -98,7 +124,7 @@ export default function ArticlesPage() {
                   e.currentTarget.style.display = "none"
                 }}
               />
-              <BookOpen className="h-8 w-8 text-blue-600 mr-3" style={{ display: "none" }} />
+              <BookOpen className="h-8 w-8 text-blue-600 mr-3 hidden" />
               <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">
                 The College Periodical
               </h1>
@@ -123,8 +149,9 @@ export default function ArticlesPage() {
         </div>
 
         {/* Filters */}
-        <div className="mb-10">
+        <div className="mb-10 bg-white/70 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
           <div className="flex flex-col lg:flex-row gap-4">
+            {/* Search */}
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
@@ -134,9 +161,40 @@ export default function ArticlesPage() {
                 className="pl-10 rounded-xl border-gray-300 focus:ring-blue-500"
               />
             </div>
-            <div className="flex gap-4">
+
+            {/* Dropdown Filters */}
+            <div className="flex flex-wrap gap-4">
+              {/* Year Filter */}
+              <Select value={selectedYear} onValueChange={setSelectedYear}>
+                <SelectTrigger className="w-[140px] rounded-xl border-gray-300">
+                  <SelectValue placeholder="Year" />
+                </SelectTrigger>
+                <SelectContent>
+                  {years.map((y) => (
+                    <SelectItem key={y} value={y}>
+                      {y}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Month Filter */}
+              <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+                <SelectTrigger className="w-[140px] rounded-xl border-gray-300">
+                  <SelectValue placeholder="Month" />
+                </SelectTrigger>
+                <SelectContent>
+                  {months.map((m) => (
+                    <SelectItem key={m} value={m}>
+                      {m}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Category Filter */}
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-[150px] rounded-xl border-gray-300">
+                <SelectTrigger className="w-[160px] rounded-xl border-gray-300">
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -148,6 +206,7 @@ export default function ArticlesPage() {
                 </SelectContent>
               </Select>
 
+              {/* Sort Filter */}
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-[150px] rounded-xl border-gray-300">
                   <SelectValue placeholder="Sort by" />
@@ -161,7 +220,7 @@ export default function ArticlesPage() {
           </div>
         </div>
 
-        {/* Loading state */}
+        {/* Results */}
         {loading ? (
           <div className="text-center py-12 text-gray-600">Loading articles...</div>
         ) : filteredArticles.length > 0 ? (
@@ -169,7 +228,7 @@ export default function ArticlesPage() {
             {filteredArticles.map((article) => (
               <Card
                 key={article.id}
-                className="p-8 hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-2xl bg-white"
+                className="p-8 hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-2xl bg-white/80 backdrop-blur-sm"
               >
                 <CardHeader className="p-0 mb-5">
                   <CardTitle className="text-3xl font-semibold text-gray-900 hover:text-blue-600 transition-colors cursor-pointer">
@@ -181,11 +240,8 @@ export default function ArticlesPage() {
                 </CardHeader>
 
                 <CardContent className="p-0">
-                  {/* Author + Category */}
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-sm text-gray-700 font-medium">
-                      ✍️ {article.author}
-                    </span>
+                    <span className="text-sm text-gray-700 font-medium">✍️ {article.author}</span>
                     <span
                       className="px-3 py-1 text-xs font-semibold text-white rounded-full shadow-sm"
                       style={{ backgroundColor: article.category_color || "#2563eb" }}
@@ -194,7 +250,6 @@ export default function ArticlesPage() {
                     </span>
                   </div>
 
-                  {/* Date */}
                   <div className="flex items-center text-sm text-gray-500 mb-6">
                     <Calendar className="h-4 w-4 mr-2" />
                     <span>
@@ -204,7 +259,6 @@ export default function ArticlesPage() {
                     </span>
                   </div>
 
-                  {/* Read More Button (Centered) */}
                   <Dialog>
                     <DialogTrigger asChild>
                       <div className="flex justify-center">
@@ -244,7 +298,9 @@ export default function ArticlesPage() {
             <Button
               onClick={() => {
                 setSearchTerm("")
-                setSelectedCategory("All")
+                setSelectedCategory("All Categories")
+                setSelectedMonth("All Months")
+                setSelectedYear("All Years")
               }}
               className="rounded-xl"
             >

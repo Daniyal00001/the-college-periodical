@@ -96,7 +96,7 @@ export default function HomePage() {
                 className="h-20 w-20 mr-2 object-contain"
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
-                  // e.currentTarget.nextElementSibling.style.display = "block";
+                  e.currentTarget.nextElementSibling.style.display = "block";
                 }}
               />
               <BookOpen

@@ -33,8 +33,9 @@ export default function LoginPage() {
         throw new Error(data.error || "Login failed")
       }
 
-      // Store user data in localStorage
+      // Store user data and token in localStorage
       localStorage.setItem("user", JSON.stringify(data.user))
+      localStorage.setItem("token", data.token)
 
       // Redirect based on role
       if (data.user.role === "super_admin") {

@@ -1,5 +1,3 @@
-
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -141,8 +139,10 @@ export default function SuperAdminDashboard() {
     }
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" })
     localStorage.removeItem("user")
+    localStorage.removeItem("token")
     router.push("/login")
   }
 
@@ -199,22 +199,22 @@ export default function SuperAdminDashboard() {
               <div className="text-3xl font-bold text-purple-600">{reviewedArticles.length}</div>
             </CardContent>
           </Card>
-          {/* <Card>
+          <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-gray-600">Approved</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-green-600">{approvedArticles.length}</div>
             </CardContent>
-          </Card> */}
-          {/* <Card>
+          </Card>
+          <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-gray-600">Rejected</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-red-600">{rejectedArticles.length}</div>
             </CardContent>
-          </Card> */}
+          </Card>
         </div>
 
         <Tabs defaultValue="unassigned" className="space-y-6">
@@ -224,6 +224,12 @@ export default function SuperAdminDashboard() {
             </TabsTrigger>
             <TabsTrigger value="reviewed">
               Reviewed ({reviewedArticles.length})
+            </TabsTrigger>
+            <TabsTrigger value="approved">
+              Approved ({approvedArticles.length})
+            </TabsTrigger>
+            <TabsTrigger value="rejected">
+              Rejected ({rejectedArticles.length})
             </TabsTrigger>
             <TabsTrigger value="reviewers">
               Reviewers ({reviewers.length})
@@ -324,70 +330,144 @@ export default function SuperAdminDashboard() {
               </CardHeader>
               <CardContent>
                 <Table>
-              <TableHeader>
-  <TableRow>
-    <TableHead>Title</TableHead>
-    <TableHead>Reviewer</TableHead>
-    <TableHead>Remarks</TableHead>
-    <TableHead>Status</TableHead>
-    <TableHead>Actions</TableHead>
-  </TableRow>
-</TableHeader>
-
-                <TableBody>
-  {reviewedArticles.map((assignment) => (
-    <TableRow key={assignment.id}>
-      <TableCell className="font-medium">{assignment.title}</TableCell>
-      <TableCell>{assignment.reviewer_name}</TableCell>
-      <TableCell className="max-w-xs truncate">{assignment.reviewer_remarks}</TableCell>
-      <TableCell>
-        <Badge
-          variant={
-            assignment.reviewer_status === "reviewed"
-              ? "outline"
-              : assignment.reviewer_status === "pending"
-              ? "secondary"
-              : "default"
-          }
-        >
-          {assignment.reviewer_status.charAt(0).toUpperCase() +
-            assignment.reviewer_status.slice(1)}
-        </Badge>
-      </TableCell>
-      <TableCell>
-        <div className="flex gap-2">
-          <Button
-            size="sm"
-            onClick={() => handleFinalDecision(assignment.submission_id, "approved")}
-            className="bg-green-600 hover:bg-green-700"
-            disabled={isLoading}
-          >
-            <CheckCircle className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => handleFinalDecision(assignment.submission_id, "rejected")}
-            disabled={isLoading}
-          >
-            <XCircle className="h-4 w-4" />
-          </Button>
-        </div>
-      </TableCell>
-    </TableRow>
-  ))}
-</TableBody>
-
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Title</TableHead>
+                      <TableHead>Reviewer</TableHead>
+                      <TableHead>Remarks</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {reviewedArticles.map((assignment) => (
+                      <TableRow key={assignment.id}>
+                        <TableCell className="font-medium">{assignment.title}</TableCell>
+                        <TableCell>{assignment.reviewer_name}</TableCell>
+                        <TableCell className="max-w-xs truncate">{assignment.reviewer_remarks}</TableCell>
+                        <TableCell>
+                          {assignment.assignment_status === "approved" ? (
+                            <Badge className="bg-green-100 text-green-800">Approved</Badge>
+                          ) : assignment.assignment_status === "rejected" ? (
+                            <Badge className="bg-red-100 text-red-800">Rejected</Badge>
+                          ) : (
+                            <Badge className="bg-yellow-100 text-yellow-800">Pending Decision</Badge>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex gap-2">
+                            {(!assignment.assignment_status || assignment.assignment_status === "reviewed") && (
+                              <>
+                                <Button
+                                  size="sm"
+                                  onClick={() => handleFinalDecision(assignment.submission_id, "approved")}
+                                  className="bg-green-600 hover:bg-green-700"
+                                  disabled={isLoading}
+                                >
+                                  <CheckCircle className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={() => handleFinalDecision(assignment.submission_id, "rejected")}
+                                  disabled={isLoading}
+                                >
+                                  <XCircle className="h-4 w-4" />
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
                 </Table>
               </CardContent>
             </Card>
           </TabsContent>
 
           {/* Approved Articles */}
-       
+          <TabsContent value="approved">
+            <Card>
+              <CardHeader>
+                <CardTitle>Approved Articles</CardTitle>
+                <CardDescription>Articles that have been approved and published</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Title</TableHead>
+                      <TableHead>Author</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Submitted</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {approvedArticles.map((article) => (
+                      <TableRow key={article.id}>
+                        <TableCell className="font-medium">{article.title}</TableCell>
+                        <TableCell>{article.author_name}</TableCell>
+                        <TableCell><Badge variant="outline">{article.category}</Badge></TableCell>
+                        <TableCell>
+                          <Badge className="bg-green-100 text-green-800">Approved</Badge>
+                        </TableCell>
+                        <TableCell>{new Date(article.submitted_at).toLocaleDateString()}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                {approvedArticles.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    No approved articles yet
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Rejected Articles */}
-     
+          <TabsContent value="rejected">
+            <Card>
+              <CardHeader>
+                <CardTitle>Rejected Articles</CardTitle>
+                <CardDescription>Articles that have been rejected</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Title</TableHead>
+                      <TableHead>Author</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Submitted</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {rejectedArticles.map((article) => (
+                      <TableRow key={article.id}>
+                        <TableCell className="font-medium">{article.title}</TableCell>
+                        <TableCell>{article.author_name}</TableCell>
+                        <TableCell><Badge variant="outline">{article.category}</Badge></TableCell>
+                        <TableCell>
+                          <Badge className="bg-red-100 text-red-800">Rejected</Badge>
+                        </TableCell>
+                        <TableCell>{new Date(article.submitted_at).toLocaleDateString()}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                {rejectedArticles.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    No rejected articles yet
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* Reviewers List */}
           <TabsContent value="reviewers">
             <Card>

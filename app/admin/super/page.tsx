@@ -51,6 +51,8 @@ export default function SuperAdminDashboard() {
   const [selectedArticle, setSelectedArticle] = useState<Submission | null>(null)
   const [selectedReviewer, setSelectedReviewer] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [publishedCount, setPublishedCount] = useState(0)
+  const [rejectedCount, setRejectedCount] = useState(0)
 
   useEffect(() => {
     const userData = localStorage.getItem("user")
@@ -69,21 +71,27 @@ export default function SuperAdminDashboard() {
     fetchData()
   }, [])
 
-  const fetchData = async () => {
-    try {
-      const [subsRes, reviewersRes, assignmentsRes] = await Promise.all([
-        fetch("/api/admin/super/submissions"),
-        fetch("/api/admin/super/reviewers"),
-        fetch("/api/admin/super/assignments")
-      ])
-      
-      if (subsRes.ok) setSubmissions(await subsRes.json())
-      if (reviewersRes.ok) setReviewers(await reviewersRes.json())
-      if (assignmentsRes.ok) setAssignments(await assignmentsRes.json())
-    } catch (error) {
-      console.error("Error fetching data:", error)
+const fetchData = async () => {
+  try {
+    const [subsRes, reviewersRes, assignmentsRes, statsRes] = await Promise.all([
+      fetch("/api/admin/super/submissions"),
+      fetch("/api/admin/super/reviewers"),
+      fetch("/api/admin/super/assignments"),
+      fetch("/api/admin/super/stats")  
+    ])
+    
+    if (subsRes.ok) setSubmissions(await subsRes.json())
+    if (reviewersRes.ok) setReviewers(await reviewersRes.json())
+    if (assignmentsRes.ok) setAssignments(await assignmentsRes.json())
+    if (statsRes.ok) {
+      const stats = await statsRes.json()
+      setPublishedCount(stats.publishedCount)
+      setRejectedCount(stats.rejectedCount)
     }
+  } catch (error) {
+    console.error("Error fetching data:", error)
   }
+}
 
   const handleAssign = async (submissionId: number) => {
     if (!selectedReviewer) {
@@ -154,23 +162,32 @@ export default function SuperAdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <BookOpen className="h-8 w-8 text-blue-600 mr-3" />
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">Super Admin Dashboard</h1>
-                <p className="text-sm text-gray-500">Welcome, {user?.name}</p>
-              </div>
-            </div>
-            <Button variant="outline" onClick={handleLogout}>
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
+     <header className="border-b bg-white">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex justify-between items-center h-16">
+        <div className="flex items-center">
+          {/* Logo */}
+          <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mr-2 sm:mr-3" />
+          
+          {/* Title + Subtitle */}
+          <div>
+            <h1 className="text-lg sm:text-xl font-bold text-gray-900">
+              Super Admin Dashboard
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-500">
+              Welcome, {user?.name}
+            </p>
           </div>
         </div>
-      </header>
+
+        {/* Logout Button */}
+        <Button variant="outline" onClick={handleLogout} className="text-xs sm:text-sm px-2 sm:px-4 py-1 sm:py-2">
+          <LogOut className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+          Logout
+        </Button>
+      </div>
+    </div>
+  </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
@@ -199,22 +216,22 @@ export default function SuperAdminDashboard() {
               <div className="text-3xl font-bold text-purple-600">{reviewedArticles.length}</div>
             </CardContent>
           </Card>
-          {/* <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600">Approved</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-green-600">{approvedArticles.length}</div>
-            </CardContent>
-          </Card> */}
-          {/* <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600">Rejected</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-red-600">{rejectedArticles.length}</div>
-            </CardContent>
-          </Card> */}
+     <Card>
+  <CardHeader className="pb-3">
+    <CardTitle className="text-sm font-medium text-gray-600">Published</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="text-3xl font-bold text-green-600">{publishedCount}</div>
+  </CardContent>
+</Card>
+<Card>
+  <CardHeader className="pb-3">
+    <CardTitle className="text-sm font-medium text-gray-600">Rejected</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="text-3xl font-bold text-red-600">{rejectedCount}</div>
+  </CardContent>
+</Card>
         </div>
 
         <Tabs defaultValue="unassigned" className="space-y-6">
@@ -344,19 +361,43 @@ export default function SuperAdminDashboard() {
                       <TableRow key={assignment.id}>
                         <TableCell className="font-medium">{assignment.title}</TableCell>
                         <TableCell>{assignment.reviewer_name}</TableCell>
-                        <TableCell className="max-w-xs truncate">{assignment.reviewer_remarks}</TableCell>
+                        <TableCell>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="ghost" size="sm" className="max-w-xs truncate text-left justify-start">
+                                {assignment.reviewer_remarks}
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Reviewer Remarks</DialogTitle>
+                                <DialogDescription>
+                                  Article: {assignment.title}
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="space-y-4">
+                                <div>
+                                  <h4 className="font-semibold mb-2">Reviewed by: {assignment.reviewer_name}</h4>
+                                  <div className="bg-gray-50 p-4 rounded-lg">
+                                    <p className="whitespace-pre-wrap">{assignment.reviewer_remarks}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </TableCell>
                         <TableCell>
                           {assignment.assignment_status === "approved" ? (
                             <Badge className="bg-green-100 text-green-800">Approved</Badge>
                           ) : assignment.assignment_status === "rejected" ? (
                             <Badge className="bg-red-100 text-red-800">Rejected</Badge>
                           ) : (
-                            <Badge className="bg-yellow-100 text-yellow-800">Pending Decision</Badge>
+                            <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
                           )}
                         </TableCell>
                         <TableCell>
                           <div className="flex gap-2">
-                            {(!assignment.assignment_status || assignment.assignment_status === "reviewed") && (
+                            {assignment.assignment_status !== "approved" && assignment.assignment_status !== "rejected" && (
                               <>
                                 <Button
                                   size="sm"
@@ -376,18 +417,26 @@ export default function SuperAdminDashboard() {
                                 </Button>
                               </>
                             )}
+                            {(assignment.assignment_status === "approved" || assignment.assignment_status === "rejected") && (
+                              <span className="text-sm text-gray-500">Decision made</span>
+                            )}
                           </div>
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
+                {reviewedArticles.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    No reviewed articles yet
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
 
-          {/* Approved Articles
-          <TabsContent value="approved">
+          {/* Approved Articles */}
+          {/* <TabsContent value="approved">
             <Card>
               <CardHeader>
                 <CardTitle>Approved Articles</CardTitle>

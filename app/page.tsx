@@ -254,29 +254,29 @@ export default function HomePage() {
             Our Startup Journey
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div className="p-6 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition">
-              <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-4">
+            {/* <div className="p-6 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition"> */}
+              {/* <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-4">
                 <BookOpen className="h-6 w-6 text-blue-700" />
-              </div>
-              <div className="text-3xl font-bold text-gray-900">20+</div>
-              <div className="text-gray-600">Articles Published</div>
-            </div>
-
+              </div> */}
+              {/* <div className="text-3xl font-bold text-gray-900">10+</div>
+              <div className="text-gray-600">Articles Published</div> */}
+            {/* </div> */}
+{/* 
             <div className="p-6 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition">
               <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg mx-auto mb-4">
                 <Users className="h-6 w-6 text-green-700" />
               </div>
-              <div className="text-3xl font-bold text-gray-900">10+</div>
+              <div className="text-3xl font-bold text-gray-900">20+</div>
               <div className="text-gray-600">Student Writers</div>
-            </div>
+            </div> */}
 
-            <div className="p-6 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition">
+            {/* <div className="p-6 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition">
               <div className="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg mx-auto mb-4">
                 <TrendingUp className="h-6 w-6 text-purple-700" />
               </div>
               <div className="text-3xl font-bold text-gray-900">500+</div>
               <div className="text-gray-600">Monthly Readers</div>
-            </div>
+            </div> */}
 
             <div className="p-6 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition">
               <div className="flex items-center justify-center w-12 h-12 bg-orange-100 rounded-lg mx-auto mb-4">

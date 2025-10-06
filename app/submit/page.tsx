@@ -13,16 +13,11 @@ import Link from "next/link"
 import { supabase } from "@/lib/supabase"
 
 const categories = [
-  "Education",
-  "Health",
-  "Technology",
-  "Business",
-  "Arts",
-  "Environment",
-  "Sports",
-  "Culture",
-  "Opinion",
-  "News",
+  "Opinion Article",
+  "Law Review Article",
+  "Institutional Review",
+  "Book Review",
+  "Other",
 ]
 
 export default function SubmitArticle() {
@@ -116,7 +111,7 @@ export default function SubmitArticle() {
               <CardTitle className="text-2xl text-green-600">Article Submitted Successfully!</CardTitle>
               <CardDescription>
                 Thank you for your submission. Our editorial team will review your article and get back to you within
-                3-5 business days.
+                2-4 weeks.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -224,7 +219,7 @@ export default function SubmitArticle() {
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-2">Review Process</h4>
                     <p className="text-sm text-gray-600">
-                      Articles are reviewed within 3-5 business days. You'll receive feedback via email.
+                      Articles are reviewed within 2-4 weeks. You'll receive feedback via email.
                     </p>
                   </div>
                   <div>

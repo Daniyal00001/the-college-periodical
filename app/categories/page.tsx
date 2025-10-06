@@ -1,16 +1,16 @@
 "use client"
 
-import { ArrowLeft, Instagram, Facebook } from "lucide-react"
+import { ArrowLeft, Mail, Instagram, Facebook, FileText, BookOpen, CheckCircle, XCircle, Clock } from "lucide-react"
 import Link from "next/link"
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Header */}
-      <header className="border-b bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-            About The College Periodical
+      <header className="border-b bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+            About <span className="text-blue-700">The College Periodical</span>
           </h1>
           <Link
             href="/"
@@ -23,62 +23,121 @@ export default function AboutPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-5xl mx-auto px-6 py-12 space-y-12">
-        {/* About Section */}
-        <section className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
-          <h2 className="text-3xl font-semibold text-gray-900 mb-6">
-            About The Periodical
-          </h2>
-          <p className="text-gray-700 leading-relaxed space-y-4">
-            The publication aims to facilitate a structured and productive dialogue among students on a broad range of subjects, thereby promoting critical thinking and its application through writing. A forum through which students can methodically share their opinions on various aspects, like politics, religion, sports, institutional policies, etc., and respond to each other. During undergraduate studies, it is not important that students publish research articles, but that they learn to think and engage meaningfully, write, and learn to articulate and respond, be that on any subject. Even though good platforms and ways of writing for them do in fact exist, young adults are usually underdeveloped to breach the strict quality barriers of such prestigious forums. A general writing culture would help reduce the gap between our capacities and the high standards of good forums. The Periodical, hence, aims to reduce this gap.
+      <main className="max-w-6xl mx-auto px-6 py-12 space-y-16">
+        
+        {/* Overview Section */}
+        <section className="bg-white p-10 rounded-3xl shadow-sm border border-gray-200">
+          <div className="flex items-center gap-3 mb-4">
+            <BookOpen className="text-blue-600 w-7 h-7" />
+            <h2 className="text-3xl font-semibold text-gray-900">Themes & Categories</h2>
+          </div>
+          <p className="text-gray-700 leading-relaxed">
+            <strong>The College Periodical</strong> covers a broad range of non-fiction themes including politics, law, religion, history, science, sports, and social sciences. 
+            Its article categories include <em>Opinion Article, Law Review Article, Institutional Review, Book Review</em>, and others.
           </p>
-
-          <p className="text-gray-700 leading-relaxed space-y-4 mt-4">
-            The periodical covers all non-fiction themes such as politics, law, religion, history, science, sports, and all other social sciences. It has several article categories, such as opinion, book review, and response articles. It aims to strike a balance between typical opinion writing that has minimal evidence/support requirements and academic writing that has the highest evidence/support requirements. Therefore, it will accept short to medium-length articles.
+          <p className="text-gray-700 leading-relaxed mt-4">
+            It aims to strike a balance between traditional opinion pieces and rigorous academic writing — 
+            welcoming short to medium-length articles backed by thoughtful evidence and argumentation.
           </p>
         </section>
 
-        {/* Publication Flow Section */}
-        <section className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
-          <h2 className="text-3xl font-semibold text-gray-900 mb-6">
-            Publication Flow
-          </h2>
-          <p className="text-gray-700 leading-relaxed space-y-4">
-            Writers should receive a confirmation email upon submitting if they provide an email address. This email conveys the submission number. Submissions are scanned through Turnitin and reviewed via a double-anonymized review process. The first decision on submissions is made within 2 to 4 weeks. One of three decisions can be made: acceptance, rejection, or revision required.
+        {/* Publication Flow */}
+        <section className="bg-white p-10 rounded-3xl shadow-sm border border-gray-200">
+          <div className="flex items-center gap-3 mb-4">
+            <FileText className="text-blue-600 w-7 h-7" />
+            <h2 className="text-3xl font-semibold text-gray-900">Publication Flow</h2>
+          </div>
+          <p className="text-gray-700 leading-relaxed">
+            Writers receive a <strong>confirmation email</strong> upon submission if they provide an email address. 
+            This email includes a <strong>submission number</strong> used in all future correspondence.
           </p>
-          <p className="text-gray-700 leading-relaxed space-y-4 mt-4">
-            Upon acceptance, articles go into production and are published on the website within 1–2 weeks. Issue numbers are allotted to publications according to the next issue in line.
+          <p className="text-gray-700 leading-relaxed mt-4">
+            Submissions are scanned through <strong>Turnitin</strong> and undergo a 
+            <strong> double-anonymized review process</strong>. The first editorial decision is made within 
+            <strong> 2 to 4 weeks</strong>.
+          </p>
+
+          <div className="mt-6 grid md:grid-cols-3 gap-6">
+            <div className="bg-blue-50 rounded-2xl p-6 border border-blue-100">
+              <CheckCircle className="text-blue-600 w-8 h-8 mb-3" />
+              <h3 className="font-semibold text-lg text-gray-900">Acceptance</h3>
+              <p className="text-gray-700 text-sm leading-relaxed mt-2">
+                Articles requiring no major changes are accepted and move directly to copyediting. 
+                Such decisions are rare and signify readiness for publication.
+              </p>
+            </div>
+
+            <div className="bg-yellow-50 rounded-2xl p-6 border border-yellow-100">
+              <Clock className="text-yellow-600 w-8 h-8 mb-3" />
+              <h3 className="font-semibold text-lg text-gray-900">Revision Required</h3>
+              <p className="text-gray-700 text-sm leading-relaxed mt-2">
+                The most common decision type — authors are asked to make specific changes to enhance clarity, structure, or depth. 
+                The final decision depends on the revised submission.
+              </p>
+            </div>
+
+            <div className="bg-red-50 rounded-2xl p-6 border border-red-100">
+              <XCircle className="text-red-600 w-8 h-8 mb-3" />
+              <h3 className="font-semibold text-lg text-gray-900">Rejection</h3>
+              <p className="text-gray-700 text-sm leading-relaxed mt-2">
+                Articles not fitting the publication’s scope or failing revision standards are declined. 
+                Desk rejections occur when a submission is outside thematic focus.
+              </p>
+            </div>
+          </div>
+
+          <p className="text-gray-700 leading-relaxed mt-6">
+            Upon <strong>acceptance</strong>, articles go into production and are published on the website within 
+            <strong> 1 to 2 weeks</strong>. Issue numbers are allotted according to the next issue in line.
           </p>
         </section>
 
         {/* Issues Section */}
-        <section className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
-          <h2 className="text-3xl font-semibold text-gray-900 mb-6">
-            Issues
-          </h2>
+        <section className="bg-white p-10 rounded-3xl shadow-sm border border-gray-200">
+          <div className="flex items-center gap-3 mb-4">
+            <Clock className="text-blue-600 w-7 h-7" />
+            <h2 className="text-3xl font-semibold text-gray-900">Publication Schedule</h2>
+          </div>
           <p className="text-gray-700 leading-relaxed">
-            The Periodical publishes four issues per year. The upcoming issue is December 2025. Submissions, reviews, and publications are on a rolling basis and not contingent on the publication of issues. Accepted submissions are published on the website without waiting for the issue.
+            The Periodical publishes <strong>four issues annually</strong>. The upcoming issue is 
+            <strong> December 2025</strong>.
+          </p>
+          <p className="text-gray-700 leading-relaxed mt-4">
+            Submissions and reviews occur on a rolling basis — accepted works appear on the website 
+            as soon as they’re ready. Issue numbers are assigned at the next scheduled release.
           </p>
         </section>
 
-        {/* Social Links */}
-        <section className="flex justify-center space-x-6">
-          <a
-            href="https://www.instagram.com/thecollegeperiodical/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center w-12 h-12 rounded-full bg-pink-100 text-pink-600 hover:bg-pink-200 transition-transform transform hover:scale-110"
-          >
-            <Instagram className="h-6 w-6" />
-          </a>
-          <a
-            href="https://www.facebook.com/thecollegeperiodical/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 transition-transform transform hover:scale-110"
-          >
-            <Facebook className="h-6 w-6" />
-          </a>
+        {/* Contact & Socials */}
+        <section className="bg-gradient-to-r from-blue-600 to-blue-700 p-10 rounded-3xl text-center text-white shadow-md">
+          <h2 className="text-3xl font-semibold mb-6">Contact & Social Links</h2>
+          <div className="flex justify-center mb-6">
+            <a
+              href="mailto:thecollegeperiodical@gmail.com"
+              className="inline-flex items-center px-6 py-3 bg-white/10 border border-white/30 rounded-xl hover:bg-white/20 transition"
+            >
+              <Mail className="h-5 w-5 mr-2" />
+              thecollegeperiodical@gmail.com
+            </a>
+          </div>
+          <div className="flex justify-center gap-6">
+            <a
+              href="https://www.instagram.com/thecollegeperiodical?igsh=MXUzb2k0d3loeGZ3NQ=="
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-12 h-12 rounded-full bg-white/20 hover:bg-white/30 transition"
+            >
+              <Instagram className="h-6 w-6" />
+            </a>
+            <a
+              href="https://www.facebook.com/share/16JcDSk5Rf/?mibextid=wwXIfr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center w-12 h-12 rounded-full bg-white/20 hover:bg-white/30 transition"
+            >
+              <Facebook className="h-6 w-6" />
+            </a>
+          </div>
         </section>
       </main>
     </div>

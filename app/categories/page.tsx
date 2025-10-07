@@ -49,7 +49,7 @@ export default function AboutPage() {
           </div>
           <p className="text-gray-700 leading-relaxed">
             Writers receive a <strong>confirmation email</strong> upon submission if they provide an email address. 
-            This email includes a <strong>submission number</strong> used in all future correspondence.
+            This email includes a <strong>Unique tracking ID</strong> used in all future correspondence.
           </p>
           <p className="text-gray-700 leading-relaxed mt-4">
             Submissions are scanned through <strong>Turnitin</strong> and undergo a 

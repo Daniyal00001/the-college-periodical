@@ -26,7 +26,7 @@ export default function AboutPage() {
       <main className="max-w-6xl mx-auto px-6 py-12 space-y-16">
         
         {/* Overview Section */}
-        <section className="bg-white p-10 rounded-3xl shadow-sm border border-gray-200">
+        {/* <section className="bg-white p-10 rounded-3xl shadow-sm border border-gray-200">
           <div className="flex items-center gap-3 mb-4">
             <BookOpen className="text-blue-600 w-7 h-7" />
             <h2 className="text-3xl font-semibold text-gray-900">Themes & Categories</h2>
@@ -39,7 +39,7 @@ export default function AboutPage() {
             It aims to strike a balance between traditional opinion pieces and rigorous academic writing — 
             welcoming short to medium-length articles backed by thoughtful evidence and argumentation.
           </p>
-        </section>
+        </section> */}
 
         {/* Publication Flow */}
         <section className="bg-white p-10 rounded-3xl shadow-sm border border-gray-200">

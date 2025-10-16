@@ -17,7 +17,7 @@ const categories = [
   "Law Review Article",
   "Institutional Review",
   "Book Review",
-  "Other",
+  "Response Article",
 ]
 
 export default function SubmitArticle() {
@@ -281,7 +281,7 @@ export default function SubmitArticle() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="excerpt">Article Excerpt *</Label>
+            <Label htmlFor="excerpt">Article Precis *</Label>
             <Textarea
               id="excerpt"
               value={formData.excerpt}

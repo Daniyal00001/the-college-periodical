@@ -42,7 +42,7 @@ export default function AboutPage() {
             During undergraduate studies, it is not essential that students publish research papers,
             but that they learn to <strong>think, write, and articulate ideas meaningfully</strong>.
             While professional forums exist, young adults often find it difficult to meet the rigorous
-            standards of such platforms. The Periodical, therefore, strives to <strong>bridge the gap</strong>
+            standards of such platforms. The Periodical, therefore, strives to <strong>bridge the gap </strong>
             between students’ developing capacities and the expectations of established publication standards,
             nurturing a general culture of writing.
           </p>

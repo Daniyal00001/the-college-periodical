@@ -3,15 +3,15 @@ import { NextResponse } from "next/server"
 import db from "@/lib/db"
 
 export async function GET(request, { params }) {
+  console.log("API Track Submission Request")
   try {
-    // Next.js 13+ mein params await karna hota hai
     const { trackingNumber } = await params
     
     if (!trackingNumber) {
       return NextResponse.json({ error: "Tracking number required" }, { status: 400 })
     }
 
-    // Fetch submission with all related data
+    // Fixed: Changed aa.reviewer_id to aa.assigned_to
     const [submissions] = await db.query(`
       SELECT 
         asub.*,
@@ -25,7 +25,7 @@ export async function GET(request, { params }) {
         a.slug
       FROM article_submissions asub
       LEFT JOIN article_assignments aa ON asub.id = aa.submission_id
-      LEFT JOIN users u ON aa.reviewer_id = u.id
+      LEFT JOIN auth_users u ON aa.assigned_to = u.id
       LEFT JOIN articles a ON asub.title = a.title 
         AND asub.author_email = (
           SELECT email FROM users WHERE id = a.author_id LIMIT 1

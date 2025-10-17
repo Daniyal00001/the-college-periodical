@@ -54,7 +54,7 @@ export default function GuidelinesPage() {
               "Publication Types",
               "Article Categories",
               "Word Limits",
-              "Preparing Your Manuscript",
+              // "Preparing Your Manuscript",
               "Citation and Support Guidelines",
               "Review Process",
               "Other Guidelines",
@@ -117,13 +117,69 @@ const sections = [
           Two main categories: <strong>opinion</strong> and <strong>book review</strong>. Subcategories expand on
           opinion writing.
         </p>
-        <ul className="list-disc ml-5 space-y-2">
-          <li><strong>Opinion articles:</strong> Balanced between opinion and academic writing; cite key arguments.</li>
-          <li><strong>Law review articles:</strong> Present legal arguments with solid references.</li>
-          <li><strong>Institutional review:</strong> Analyze educational or policy frameworks.</li>
-          <li><strong>Book review:</strong> Critically analyze themes, impact, and context.</li>
-          <li><strong>Response articles:</strong> Engage respectfully with previously published content.</li>
-        </ul>
+
+        <div className="space-y-4 mt-4">
+          <div>
+            <h4 className="font-semibold text-gray-900">Opinion Articles</h4>
+            <p>
+              Opinion articles are supposed to be between the typical opinion writing, which has minimal
+              evidence requirements, and academic writing, which has the highest of those requirements.
+              Meaning that while not all statements need to be cited, key ideas and arguments need to be.
+              It is important to convey that you have formed this opinion from valid, trustworthy, and
+              accessible sources, that it is a well-informed opinion others can rely on. As these are not
+              full-length articles, they will typically have one central idea and present one argument.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-gray-900">Law Review Articles</h4>
+            <p>
+              In the scope of this periodical, a law review article is largely a sub-category of opinion
+              writing. Additional legal support would, however, be required. It may present arguments in
+              favor and/or theoretical or practical, and ultimately take a stance. A law may be reviewed
+              at any level: a statute, an act, a section/an article, and so on. Even the phrasing or
+              wording of a law or a part of a law can be inspected, for instance, arguing that the current
+              phrasing creates certain negative implications, is ineffective, and arguing for an improved
+              version of it.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-gray-900">Institutional Review Articles</h4>
+            <p>
+              While this is an independent publication and not affiliated with any institute, writers may
+              comment on policies, frameworks, practices, etc., of their respective institutes, or on
+              education overall. This is to encourage discourse on the education sector and institutions.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-gray-900">Book Review Articles</h4>
+            <p>
+              While a book review might merely be a precis or summary of a book, a good review is not
+              merely that. A good review must critically analyze and evaluate the strengths and weaknesses
+              of a book or a part of it. For instance, the book attempts to make X argument but falls short
+              for Y reasons. It can introduce a different lens to review the book, for instance, that a
+              book adopts a modernist framework to analyze nationalism without addressing the challenges
+              posed to it by other frameworks, such as ethnosymbolist, and how these challenges weaken the
+              book. Furthermore, it may also draw relevance of a book in our time and context, showing the
+              strength of the book, or how the book remains limited to only a particular context,
+              conveying the limitations of the book.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-gray-900">Response Articles</h4>
+            <p>
+              Writers may enhance an already published article and provide further analysis in agreement,
+              or they may differ. This category is to encourage engagement between writers, whether by
+              agreeing or by disagreeing with each other. In any case, the tone and writing should be
+              respectful and should be based on logical grounds. Such articles may respond to the articles
+              of any category. Generally, a response article will be given preference over an original
+              article, given that the latter is not time-sensitive.
+            </p>
+          </div>
+        </div>
       </>
     ),
   },
@@ -136,19 +192,19 @@ const sections = [
       </>
     ),
   },
-  {
-    title: "Preparing Your Manuscript",
-    content: (
-      <ul className="list-disc ml-5 space-y-2">
-        <li>Use the official Article Template (A4, 1-inch margins).</li>
-        <li>12pt Times New Roman, double spacing, APA 7th references.</li>
-        <li>Headings hierarchy: Bold → Bold Italic → Italic → Inline Italic.</li>
-        <li>Only capitalize first word and proper nouns.</li>
-        <li>Quotes under 40 words in quotes (“”), longer ones as indented blocks.</li>
-        <li>Maintain language consistency; American English preferred.</li>
-      </ul>
-    ),
-  },
+  // {
+  //   title: "Preparing Your Manuscript",
+  //   content: (
+  //     <ul className="list-disc ml-5 space-y-2">
+  //       <li>Use the official Article Template (A4, 1-inch margins).</li>
+  //       <li>12pt Times New Roman, double spacing, APA 7th references.</li>
+  //       <li>Headings hierarchy: Bold → Bold Italic → Italic → Inline Italic.</li>
+  //       <li>Only capitalize first word and proper nouns.</li>
+  //       <li>Quotes under 40 words in quotes (“”), longer ones as indented blocks.</li>
+  //       <li>Maintain language consistency; American English preferred.</li>
+  //     </ul>
+  //   ),
+  // },
   {
     title: "Citation and Support Guidelines",
     content: (

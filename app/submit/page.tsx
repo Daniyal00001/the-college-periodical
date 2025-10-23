@@ -18,7 +18,11 @@ const categories = [
   "Institutional Review",
   "Book Review",
   "Response Article",
-]
+  "Tech Insight Article",
+  "Medical Review Article",
+  "Leadership Perspective",
+];
+
 
 export default function SubmitArticle() {
   console.log("SubmitArticle component rendered");

@@ -1,3 +1,4 @@
+
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server"
@@ -10,7 +11,8 @@ export async function GET() {
       SELECT id, title, author_name, author_email, tracking_number, category,
              excerpt, content, tags, assignment_status, submitted_at
       FROM article_submissions
-      WHERE status = 'pending'
+      WHERE (status = 'pending' OR status = 'resubmitted') 
+        AND assignment_status = 'unassigned'
       ORDER BY submitted_at DESC
     `)
 

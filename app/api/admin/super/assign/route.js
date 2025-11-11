@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import db from "@/lib/db"
 
 export async function POST(req) {
-  console.log("API Assign Article to Reviewer")
+  console.log("API Assign Article to Reviewerrrrrrrrrrrrr")
   try {
     const { submissionId, reviewerId, assignedBy } = await req.json()
 

@@ -342,110 +342,120 @@ export default function SuperAdminDashboard() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Title</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Submitted</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {unassignedArticles.map((article) => (
-                      <TableRow key={article.id}>
-                        <TableCell className="font-medium">
-                          {article.title}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">{article.category}</Badge>
-                        </TableCell>
-                        <TableCell>
-                          {new Date(article.submitted_at).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => setSelectedArticle(article)}
-                                >
-                                  <Eye className="h-4 w-4" />
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                                <DialogHeader>
-                                  <DialogTitle>
-                                    {selectedArticle?.title}
-                                  </DialogTitle>
-                                  <DialogDescription>
-                                    By {selectedArticle?.author_name} (
-                                    {selectedArticle?.author_email})
-                                  </DialogDescription>
-                                </DialogHeader>
-                                <div className="space-y-4">
-                                  <div>
-                                    <h4 className="font-semibold mb-2">
-                                      Excerpt
-                                    </h4>
-                                    <p className="text-gray-600">
-                                      {selectedArticle?.excerpt}
-                                    </p>
-                                  </div>
-                                  <div>
-                                    <h4 className="font-semibold mb-2">
-                                      Full Content
-                                    </h4>
-                                    <div className="bg-gray-50 p-4 rounded-lg">
-                                      <p className="whitespace-pre-wrap">
-                                        {selectedArticle?.content}
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="space-y-2">
-                                    <h4 className="font-semibold">
-                                      Assign to Reviewer
-                                    </h4>
-                                    <Select
-                                      value={selectedReviewer}
-                                      onValueChange={setSelectedReviewer}
-                                    >
-                                      <SelectTrigger>
-                                        <SelectValue placeholder="Select reviewer" />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        {reviewers.map((r) => (
-                                          <SelectItem
-                                            key={r.id}
-                                            value={r.id.toString()}
-                                          >
-                                            {r.name} ({r.email})
-                                          </SelectItem>
-                                        ))}
-                                      </SelectContent>
-                                    </Select>
-                                    <Button
-                                      onClick={() =>
-                                        handleAssign(selectedArticle!.id)
-                                      }
-                                      disabled={isLoading || !selectedReviewer}
-                                      className="w-full"
-                                    >
-                                      <UserPlus className="h-4 w-4 mr-2" />
-                                      Assign Article
-                                    </Button>
-                                  </div>
-                                </div>
-                              </DialogContent>
-                            </Dialog>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+             <Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Title</TableHead>
+      <TableHead>Author</TableHead>
+      <TableHead>Email</TableHead>
+      <TableHead>Tracking #</TableHead>
+      <TableHead>Category</TableHead>
+      <TableHead>Submitted</TableHead>
+      <TableHead>Actions</TableHead>
+    </TableRow>
+  </TableHeader>
+
+  <TableBody>
+    {unassignedArticles.map((article) => (
+      <TableRow key={article.id}>
+        <TableCell className="font-medium">
+          {article.title}
+        </TableCell>
+
+        <TableCell>
+          {article.author_name}
+        </TableCell>
+
+        <TableCell>
+          {article.author_email}
+        </TableCell>
+
+        <TableCell className="font-mono text-sm">
+          {article.tracking_number}
+        </TableCell>
+
+        <TableCell>
+          <Badge variant="outline">{article.category}</Badge>
+        </TableCell>
+
+        <TableCell>
+          {new Date(article.submitted_at).toLocaleDateString()}
+        </TableCell>
+
+        <TableCell>
+          <div className="flex gap-2">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSelectedArticle(article)}
+                >
+                  <Eye className="h-4 w-4" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>{selectedArticle?.title}</DialogTitle>
+                  <DialogDescription>
+                    By {selectedArticle?.author_name} (
+                    {selectedArticle?.author_email})<br />
+                    Tracking #: {selectedArticle?.tracking_number}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Excerpt</h4>
+                    <p className="text-gray-600">{selectedArticle?.excerpt}</p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold mb-2">Full Content</h4>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="whitespace-pre-wrap">
+                        {selectedArticle?.content}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <h4 className="font-semibold">Assign to Reviewer</h4>
+                    <Select
+                      value={selectedReviewer}
+                      onValueChange={setSelectedReviewer}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select reviewer" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {reviewers.map((r) => (
+                          <SelectItem key={r.id} value={r.id.toString()}>
+                            {r.name} ({r.email})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    <Button
+                      onClick={() => handleAssign(selectedArticle!.id)}
+                      disabled={isLoading || !selectedReviewer}
+                      className="w-full"
+                    >
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Assign Article
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>
+
               </CardContent>
             </Card>
           </TabsContent>

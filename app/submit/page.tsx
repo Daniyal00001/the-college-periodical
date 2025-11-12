@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
-import 'react-quill/dist/quill.snow.css'
+// import 'react-quill/dist/quill.snow.css'
 import dynamic from "next/dynamic"
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false })
 

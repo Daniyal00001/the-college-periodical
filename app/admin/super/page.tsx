@@ -410,14 +410,16 @@ export default function SuperAdminDashboard() {
                     <p className="text-gray-600">{selectedArticle?.excerpt}</p>
                   </div>
 
-                  <div>
-                    <h4 className="font-semibold mb-2">Full Content</h4>
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="whitespace-pre-wrap">
-                        {selectedArticle?.content}
-                      </p>
-                    </div>
-                  </div>
+                <div>
+  <h4 className="font-semibold mb-2">Full Content</h4>
+  <div
+    className="bg-gray-50 p-4 rounded-lg prose max-w-none"
+    dangerouslySetInnerHTML={{
+      __html: selectedArticle?.content || "",
+    }}
+  />
+</div>
+
 
                   <div className="space-y-2">
                     <h4 className="font-semibold">Assign to Reviewer</h4>

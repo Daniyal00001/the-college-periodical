@@ -115,11 +115,11 @@ export default function ArticleDetailPage() {
         )}
 
         {/* Content */}
-        <div className="prose prose-lg max-w-none">
-          <div className="text-gray-800 leading-relaxed whitespace-pre-line">
-            {article.content}
-          </div>
-        </div>
+     <div
+  className="prose prose-lg max-w-none text-gray-800 leading-relaxed"
+  dangerouslySetInnerHTML={{ __html: article.content }}
+></div>
+
 
         {/* Tags */}
         {article.tags && article.tags.length > 0 && (

@@ -8,6 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
+import 'react-quill/dist/quill.snow.css'
+import dynamic from "next/dynamic"
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false })
 
 const categories = [
   "Opinion Article",
@@ -350,18 +353,16 @@ export default function SubmitArticle() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="content">Article Content *</Label>
-                        <Textarea
-                          id="content"
-                          value={formData.content}
-                          onChange={(e) => handleInputChange("content", e.target.value)}
-                          placeholder="Write your full article here..."
-                          rows={12}
-                        />
-                        <p className="text-sm text-gray-500">
-                          Current word count:{" "}
-                          {formData.content.split(" ").filter((word) => word.length > 0).length}
-                        </p>
+                     <Label htmlFor="content">Article Content *</Label>
+<ReactQuill
+  theme="snow"
+  value={formData.content}
+  onChange={(value) => handleInputChange("content", value)}
+  placeholder="Write your full article here..."
+/>
+<p className="text-sm text-gray-500">
+  Current word count: {formData.content.replace(/<[^>]+>/g, '').split(/\s+/).filter(Boolean).length}
+</p>
                       </div>
 
                       <div className="flex justify-end">

@@ -3,6 +3,7 @@ import db from "@/lib/db"
 import { generateTrackingNumber } from "@/lib/generateTrackingNumber"
 import { sendEmail } from "@/lib/emailService"
 import { getSubmissionConfirmationEmail } from "@/lib/emailTemplates"
+import DOMPurify from "isomorphic-dompurify" // ✅ Add this
 
 export async function POST(req) {
   console.log("API Submit Article Request")
@@ -14,6 +15,9 @@ export async function POST(req) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
+    // ✅ Sanitize the HTML content to prevent script injections
+    const cleanContent = DOMPurify.sanitize(content)
+
     // Generate unique tracking number
     const trackingNumber = generateTrackingNumber()
 
@@ -22,7 +26,7 @@ export async function POST(req) {
       `INSERT INTO article_submissions 
        (title, author_name, author_email, category, excerpt, content, tags, status, tracking_number) 
        VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)`,
-      [title, author, email, category, excerpt, content, JSON.stringify(tags), trackingNumber]
+      [title, author, email, category, excerpt, cleanContent, JSON.stringify(tags), trackingNumber]
     )
 
     // Send confirmation email

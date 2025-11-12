@@ -242,9 +242,13 @@ export default function ArticlesPage() {
                   </CardHeader>
 
                   <CardContent className="p-0">
-                    <CardDescription className="text-gray-600 mb-4 text-sm leading-relaxed">
-                      {truncateContent(article.content, 200)}
-                    </CardDescription>
+                  <CardDescription
+  className="text-gray-600 mb-4 text-sm leading-relaxed prose max-w-none"
+  dangerouslySetInnerHTML={{
+    __html: truncateContent(article.content, 200),
+  }}
+/>
+
 
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-sm text-gray-700 font-medium">

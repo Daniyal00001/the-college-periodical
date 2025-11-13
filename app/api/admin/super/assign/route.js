@@ -11,14 +11,14 @@ export async function POST(req) {
     }
 
     // Check if already assigned
-    const [existing] = await db.query(
-      `SELECT id FROM article_assignments WHERE submission_id = ?`,
-      [submissionId]
-    )
+    // const [existing] = await db.query(
+    //   `SELECT id FROM article_assignments WHERE submission_id = ?`,
+    //   [submissionId]
+    // )
 
-    if (existing && existing.length > 0) {
-      return NextResponse.json({ error: "Article already assigned" }, { status: 400 })
-    }
+    // if (existing && existing.length > 0) {
+    //   return NextResponse.json({ error: "Article already assigned" }, { status: 400 })
+    // }
 
     // Create assignment
     await db.query(

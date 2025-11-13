@@ -3,7 +3,7 @@ import db from "@/lib/db";
 import { generateTrackingNumber } from "@/lib/generateTrackingNumber";
 import { sendEmail } from "@/lib/emailService";
 import { getSubmissionConfirmationEmail } from "@/lib/emailTemplates";
-import { sanitizeHTML } from "@/lib/sanitizeHtml"; // ✅ Use server-safe sanitizer
+import { sanitizeHTML } from "@/lib/sanitizeHtml"; // server-safe
 
 export async function POST(req) {
   console.log("API Submit Article Request");

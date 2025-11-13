@@ -261,7 +261,7 @@ export default function SubmitArticle() {
               className="min-w-[150px]"
             >
               <RefreshCw className="h-4 w-4 mr-2" />
-              Resubmit Article
+              Submit Revision
             </Button>
           </div>
 
@@ -442,7 +442,7 @@ export default function SubmitArticle() {
                           ) : (
                             <>
                               <RefreshCw className="h-4 w-4 mr-2" />
-                              Resubmit Article
+                                 Submit Revision
                             </>
                           )}
                         </Button>

@@ -190,6 +190,9 @@ export default function HomePage() {
         </div>
       </section>
 
+
+      
+
       <section className="py-24 bg-gray-100 text-center">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="text-4xl font-bold text-gray-900 mb-6">Submissions Are Open Now!</h2>

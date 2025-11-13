@@ -409,13 +409,16 @@ export default function SubmitArticle() {
 
                       <div className="space-y-2">
                         <Label htmlFor="resubmitContent">Updated Article Content *</Label>
-                        <Textarea
-                          id="resubmitContent"
-                          value={resubmitData.content}
-                          onChange={(e) => handleResubmitChange("content", e.target.value)}
-                          placeholder="Paste your revised article content here..."
-                          rows={16}
-                        />
+                    <ReactQuill
+  theme="snow"
+  value={resubmitData.content}
+  onChange={(value) => handleResubmitChange("content", value)}
+  placeholder="Paste your revised article content here..."
+/>
+<p className="text-sm text-gray-500">
+  Word count: {resubmitData.content.replace(/<[^>]+>/g, '').split(/\s+/).filter(Boolean).length}
+</p>
+
                         <p className="text-sm text-gray-500">
                           Current word count:{" "}
                           {resubmitData.content.split(" ").filter((word) => word.length > 0).length}

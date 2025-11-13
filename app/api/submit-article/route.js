@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { generateTrackingNumber } from '@/lib/generateTrackingNumber'
-import { sendEmail } from '@/lib/email'
 // Remove this import - it causes build errors
 // import DOMPurify from 'isomorphic-dompurify'
+// Removed email import - add it back if you have the email.js file
 
 // Add this to make the route dynamic (not pre-rendered at build time)
 export const dynamic = 'force-dynamic'
@@ -37,24 +37,27 @@ export async function POST(req) {
   const { data: article_submission, error } = await supabase
     .from('article_submissions')
     .insert([
-      { title, author, email, category, excerpt, cleanContent, tags, status, tracking_number: trackingNumber }
+      { 
+        title, 
+        author, 
+        email, 
+        category, 
+        excerpt, 
+        content: cleanContent, 
+        tags, 
+        status: 'submitted',
+        tracking_number: trackingNumber 
+      }
     ])
     .select()
 
   if (error) {
     console.log(error)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  // Send confirmation email
-  const emailSent = await sendEmail(email, emailTemplate.subject, emailTemplate.html, emailTemplate.text)
-
-  if (err) {
-    console.error('Email error:', err)
-    return NextResponse.json({ 
-      error: err.message 
-    }, { status: 500 })
-  }
+  // TODO: Send confirmation email if you have email functionality
+  // const emailSent = await sendEmail(email, emailTemplate.subject, emailTemplate.html, emailTemplate.text)
 
   return NextResponse.json({ 
     message: 'Article submitted successfully', 

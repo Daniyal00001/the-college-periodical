@@ -1,25 +1,30 @@
-import { NextResponse } from "next/server"
-import db from "@/lib/db"
-import { generateTrackingNumber } from "@/lib/generateTrackingNumber"
-import { sendEmail } from "@/lib/emailService"
-import { getSubmissionConfirmationEmail } from "@/lib/emailTemplates"
-import DOMPurify from "isomorphic-dompurify" // ✅ Add this
+import { NextResponse } from "next/server";
+import db from "@/lib/db";
+import { generateTrackingNumber } from "@/lib/generateTrackingNumber";
+import { sendEmail } from "@/lib/emailService";
+import { getSubmissionConfirmationEmail } from "@/lib/emailTemplates";
+import { sanitizeHTML } from "@/lib/sanitizeHtml"; // ✅ Use server-safe sanitizer
 
 export async function POST(req) {
-  console.log("API Submit Article Request")
-  try {
-    const body = await req.json()
-    const { title, author, email, category, excerpt, content, tags } = body
+  console.log("API Submit Article Request");
 
+  try {
+    const body = await req.json();
+    const { title, author, email, category, excerpt, content, tags } = body;
+
+    // Validate required fields
     if (!title || !author || !email || !category || !excerpt || !content) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
     }
 
-    // ✅ Sanitize the HTML content to prevent script injections
-    const cleanContent = DOMPurify.sanitize(content)
+    // Sanitize HTML content to prevent XSS
+    const cleanContent = sanitizeHTML(content);
 
     // Generate unique tracking number
-    const trackingNumber = generateTrackingNumber()
+    const trackingNumber = generateTrackingNumber();
 
     // Insert into database
     const [result] = await db.query(
@@ -27,21 +32,21 @@ export async function POST(req) {
        (title, author_name, author_email, category, excerpt, content, tags, status, tracking_number) 
        VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)`,
       [title, author, email, category, excerpt, cleanContent, JSON.stringify(tags), trackingNumber]
-    )
+    );
 
     // Send confirmation email
-    const emailTemplate = getSubmissionConfirmationEmail(author, title, trackingNumber)
-    await sendEmail(email, emailTemplate.subject, emailTemplate.html, emailTemplate.text)
+    const emailTemplate = getSubmissionConfirmationEmail(author, title, trackingNumber);
+    await sendEmail(email, emailTemplate.subject, emailTemplate.html, emailTemplate.text);
 
-    console.log("Article submitted with tracking number:", trackingNumber)
+    console.log("Article submitted with tracking number:", trackingNumber);
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       id: result.insertId,
-      trackingNumber 
-    })
+      trackingNumber
+    });
   } catch (err) {
-    console.error("Submit error:", err)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    console.error("Submit error:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

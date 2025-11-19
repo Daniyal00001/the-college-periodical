@@ -10,7 +10,9 @@ export async function GET() {
       SELECT a.*, 
              c.name AS category_name,
              s.author_name, 
-             s.author_email
+             s.author_email,
+             s.tracking_number
+
       FROM articles a
       LEFT JOIN categories c ON a.category_id = c.id
       LEFT JOIN article_submissions s ON a.author_id = s.id

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import db from "@/lib/db";
 
 export async function POST(req) {
-  console.log("API Approve Article Request");
+  console.log("API Approveeeeeeeeeeeee Article Request");
   try {
     const { articleId } = await req.json();
 

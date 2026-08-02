@@ -1,5 +1,7 @@
 "use client"
 
+import NavbarHeader from "@/components/NavbarHeader"
+
 import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { Calendar, User, ArrowLeft, BookOpen } from "lucide-react"
@@ -54,29 +56,11 @@ export default function ArticleDetailPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="border-b bg-white shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <img
-                src="/logo.png"
-                alt="The College Periodical Logo"
-                className="h-12 w-12 sm:h-16 sm:w-16 mr-3 object-contain hover:scale-105 transition-transform"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none"
-                }}
-              />
-              <h1 className="text-xl font-bold text-gray-900">The College Periodical</h1>
-            </Link>
-            <Link href="/articles">
-              <Button variant="outline">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                All Articles
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <NavbarHeader
+        subtitle="Published Article Reader"
+        backUrl="/articles"
+        backText="All Articles"
+      />
 
       {/* Article Content */}
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

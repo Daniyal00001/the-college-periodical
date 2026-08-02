@@ -346,6 +346,8 @@
 
 "use client"
 
+import NavbarHeader from "@/components/NavbarHeader"
+
 import { useState, useEffect } from "react"
 import { Search, Calendar, BookOpen, ArrowLeft, ChevronLeft, ChevronRight, Mail, Hash } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -468,32 +470,11 @@ export default function ArticlesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-100">
       {/* Header */}
-      <header className="border-b bg-white/70 backdrop-blur-sm shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <img
-                src="/logo.png"
-                alt="The College Periodical Logo"
-                className="h-12 w-12 sm:h-16 sm:w-16 lg:h-20 lg:w-20 mr-2 object-contain"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none"
-                }}
-              />
-              <BookOpen className="h-8 w-8 text-blue-600 mr-3 hidden" />
-              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">
-                The College Periodical
-              </h1>
-            </Link>
-            <Link href="/">
-              <Button variant="outline" className="rounded-xl">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Home
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <NavbarHeader
+        subtitle="Browse Articles & Manuscripts"
+        backUrl="/"
+        backText="Home"
+      />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}

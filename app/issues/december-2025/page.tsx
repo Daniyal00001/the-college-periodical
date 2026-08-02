@@ -1,5 +1,7 @@
 "use client"
 
+import NavbarHeader from "@/components/NavbarHeader"
+
 import { useState, useEffect } from "react"
 import { Snowflake, Clock, Calendar, FileText, ArrowLeft, ArrowRight, ShieldCheck, Sparkles, CheckCircle2 } from "lucide-react"
 import { motion } from "framer-motion"
@@ -33,43 +35,11 @@ export default function December2025Issue() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-between text-gray-800 font-sans">
       
       {/* HEADER NAVBAR */}
-      <header className="border-b bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <img
-                src="/logo.png"
-                alt="The College Periodical Logo"
-                className="h-16 w-16 sm:h-20 sm:w-20 object-contain transition-transform group-hover:scale-105"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none"
-                }}
-              />
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight group-hover:text-blue-700 transition-colors">
-                  The College Periodical
-                </h1>
-                <p className="text-xs text-blue-700 font-semibold tracking-wide uppercase">
-                  ❄️ December 2025 Edition
-                </p>
-              </div>
-            </Link>
-
-            <Link href="/">
-              <Button
-                variant="outline"
-                className="rounded-xl border-gray-300 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-all font-medium"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Home
-              </Button>
-            </Link>
-
-          </div>
-        </div>
-      </header>
+      <NavbarHeader
+        subtitle="❄️ December 2025 Edition"
+        backUrl="/"
+        backText="Home"
+      />
 
       {/* HERO SECTION (LIGHT ACADEMIC THEME) */}
       <section className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-blue-100/70 via-white to-blue-50/40 text-gray-900 border-b border-gray-200">

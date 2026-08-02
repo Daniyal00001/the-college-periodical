@@ -43,6 +43,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
 
 type Submission = {
   id: number;
@@ -54,6 +55,7 @@ type Submission = {
   assignment_status: string;
   excerpt: string;
   content: string;
+  tracking_number?: string;
 };
 
 type Reviewer = {
@@ -73,6 +75,9 @@ type Assignment = {
   reviewer_status: string;
   assigned_at: string;
   assignment_status: string;
+  author_name?: string;
+  author_email?: string;
+  tracking_number?: string;
 };
 
 export default function SuperAdminDashboard() {
@@ -90,20 +95,37 @@ export default function SuperAdminDashboard() {
   const [rejectedCount, setRejectedCount] = useState(0);
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (!userData) {
-      router.push("/login");
-      return;
+    async function initSession() {
+      try {
+        const res = await fetch("/api/auth/me");
+        if (!res.ok) {
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
+          router.push("/login");
+          return;
+        }
+
+        const data = await res.json();
+        if (!data.user) {
+          router.push("/login");
+          return;
+        }
+
+        if (data.user.role !== "super_admin") {
+          router.push("/admin/reviewer");
+          return;
+        }
+
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        fetchData();
+      } catch (error) {
+        console.error("Session error:", error);
+        router.push("/login");
+      }
     }
 
-    const parsed = JSON.parse(userData);
-    if (parsed.role !== "super_admin") {
-      router.push("/admin/reviewer");
-      return;
-    }
-
-    setUser(parsed);
-    fetchData();
+    initSession();
   }, []);
 
   const fetchData = async () => {
@@ -115,6 +137,11 @@ export default function SuperAdminDashboard() {
           fetch("/api/admin/super/assignments"),
           fetch("/api/admin/super/stats"),
         ]);
+
+      if (subsRes.status === 401 || subsRes.status === 403) {
+        handleLogout();
+        return;
+      }
 
       if (subsRes.ok) setSubmissions(await subsRes.json());
       if (reviewersRes.ok) setReviewers(await reviewersRes.json());
@@ -222,7 +249,16 @@ export default function SuperAdminDashboard() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               {/* Logo */}
-              <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mr-2 sm:mr-3" />
+              <Link href="/">
+                <img
+                  src="/logo.png"
+                  alt="The College Periodical Logo"
+                  className="h-12 w-12 sm:h-14 sm:w-14 mr-2 sm:mr-3 object-contain hover:scale-105 transition-transform"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              </Link>
 
               {/* Title + Subtitle */}
               <div>

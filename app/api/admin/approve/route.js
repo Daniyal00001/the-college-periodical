@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
+import { getAuthUser } from "@/lib/auth";
 import db from "@/lib/db";
 
 export async function POST(req) {
-  console.log("API Approveeeeeeeeeeeee Article Request");
   try {
+    const { errorResponse } = await getAuthUser(req, ['super_admin'])
+    if (errorResponse) return errorResponse
+
     const { articleId } = await req.json();
 
     if (!articleId) {
@@ -65,7 +68,6 @@ export async function POST(req) {
     let newStatus = "published";
 
     if (existingArticle.length > 0) {
-      // Already exists → toggle publish/unpublish
       const currentStatus = existingArticle[0].status;
       newStatus = currentStatus === "published" ? "unpublished" : "published";
 
@@ -76,7 +78,6 @@ export async function POST(req) {
         [newStatus, existingArticle[0].id]
       );
     } else {
-      // First time approval → insert into articles
       const slug = article.title
         .toLowerCase()
         .replace(/\s+/g, "-")
@@ -119,10 +120,9 @@ export async function POST(req) {
       [newStatus, articleId]
     );
 
-    console.log(`✅ Article ${newStatus}:`, articleId);
     return NextResponse.json({ success: true, status: newStatus });
   } catch (err) {
-    console.error("❌ Approve Error:", err);
+    console.error("Approve Error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

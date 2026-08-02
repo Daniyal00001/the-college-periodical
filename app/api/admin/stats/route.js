@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server"
+import { getAuthUser } from "@/lib/auth"
 import db from "@/lib/db"
 
-export async function GET() {
-  console.log("API Get Stats Request")
+export async function GET(req) {
   try {
-    // Count published articles
+    const { errorResponse } = await getAuthUser(req, ['super_admin', 'reviewer'])
+    if (errorResponse) return errorResponse
+
     const [countRows] = await db.query(`
       SELECT COUNT(*) as count 
       FROM articles 
@@ -13,10 +15,9 @@ export async function GET() {
 
     const publishedCount = countRows[0]?.count || 0
 
-    console.log("✅ Stats fetched - Published:", publishedCount)
     return NextResponse.json({ publishedCount })
   } catch (err) {
-    console.error("❌ DB Error:", err)
+    console.error("DB Error:", err)
     return NextResponse.json({ error: "Database error" }, { status: 500 })
   }
 }

@@ -1,12 +1,14 @@
-
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server"
+import { getAuthUser } from "@/lib/auth"
 import db from "@/lib/db"
 
-export async function GET() {
-  console.log("API Get Submissions for Super Admin")
+export async function GET(req) {
   try {
+    const { errorResponse } = await getAuthUser(req, ['super_admin'])
+    if (errorResponse) return errorResponse
+
     const [rows] = await db.query(`
       SELECT id, title, author_name, author_email, tracking_number, category,
              excerpt, content, tags, assignment_status, submitted_at

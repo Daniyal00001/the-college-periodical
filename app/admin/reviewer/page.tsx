@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
+import Link from "next/link"
 
 type Assignment = {
   id: number
@@ -32,25 +33,46 @@ export default function ReviewerDashboard() {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    const userData = localStorage.getItem("user")
-    if (!userData) {
-      router.push("/login")
-      return
+    async function initSession() {
+      try {
+        const res = await fetch("/api/auth/me")
+        if (!res.ok) {
+          localStorage.removeItem("user")
+          localStorage.removeItem("token")
+          router.push("/login")
+          return
+        }
+
+        const data = await res.json()
+        if (!data.user) {
+          router.push("/login")
+          return
+        }
+
+        if (data.user.role !== "reviewer" && data.user.role !== "super_admin") {
+          router.push("/admin/super")
+          return
+        }
+
+        setUser(data.user)
+        localStorage.setItem("user", JSON.stringify(data.user))
+        fetchAssignments(data.user.id)
+      } catch (error) {
+        console.error("Session error:", error)
+        router.push("/login")
+      }
     }
-    
-    const parsed = JSON.parse(userData)
-    if (parsed.role !== "reviewer") {
-      router.push("/admin/super")
-      return
-    }
-    
-    setUser(parsed)
-    fetchAssignments(parsed.id)
+
+    initSession()
   }, [])
 
   const fetchAssignments = async (reviewerId: number) => {
     try {
       const res = await fetch(`/api/admin/reviewer/assignments?reviewerId=${reviewerId}`)
+      if (res.status === 401 || res.status === 403) {
+        handleLogout()
+        return
+      }
       if (res.ok) {
         const data = await res.json()
         setAssignments(data)
@@ -77,6 +99,11 @@ export default function ReviewerDashboard() {
         })
       })
 
+      if (res.status === 401 || res.status === 403) {
+        handleLogout()
+        return
+      }
+
       if (!res.ok) throw new Error("Failed to submit review")
 
       alert("Review submitted successfully!")
@@ -90,8 +117,14 @@ export default function ReviewerDashboard() {
     }
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" })
+    } catch (e) {
+      console.error(e)
+    }
     localStorage.removeItem("user")
+    localStorage.removeItem("token")
     router.push("/login")
   }
 
@@ -104,7 +137,16 @@ export default function ReviewerDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <BookOpen className="h-8 w-8 text-blue-600 mr-3" />
+              <Link href="/">
+                <img
+                  src="/logo.png"
+                  alt="The College Periodical Logo"
+                  className="h-12 w-12 sm:h-14 sm:w-14 mr-3 object-contain hover:scale-105 transition-transform"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none"
+                  }}
+                />
+              </Link>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Reviewer Dashboard</h1>
                 <p className="text-sm text-gray-500">Welcome, {user?.name}</p>

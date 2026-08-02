@@ -1,89 +1,162 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { Users, Code, PenTool, Share2, ArrowLeft, Sparkles, ShieldCheck, UserCheck } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Users, Code, PenTool, Share2 } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 
 export default function TeamPage() {
   const teams = [
     {
-      title: "Administration",
+      title: "Administration & Leadership",
       icon: Users,
+      badge: "Executive Board",
+      badgeColor: "bg-blue-50 text-blue-700 border-blue-200",
+      iconBg: "bg-blue-100 text-blue-600",
       members: ["Nawall Shehraz", "Noor ul Huda Pervaiz", "Syed Jawad Arshad"],
-      color: "from-blue-500 to-indigo-600",
+      description: "Overseeing journal operations, institutional relations, charter adherence, and strategic growth."
     },
     {
-      title: "Technical Team",
-      icon: Code,
-      members: ["Muhammad Daniyal Tallat"],
-      color: "from-emerald-500 to-teal-600",
-    },
-    {
-      title: "Editors",
+      title: "Editorial Board",
       icon: PenTool,
+      badge: "Peer Review & Copyediting",
+      badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-200",
+      iconBg: "bg-indigo-100 text-indigo-600",
       members: ["Aly Osjah Bukhari", "Zara Qazi", "Syed Jawad Arshad"],
-      color: "from-amber-500 to-orange-600",
+      description: "Managing double-anonymized peer review pipelines, article evaluation, and APA 7th style copyediting."
     },
     {
-      title: "Outreach",
+      title: "Technical & Systems Team",
+      icon: Code,
+      badge: "Engineering & Platform",
+      badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      iconBg: "bg-emerald-100 text-emerald-600",
+      members: ["Muhammad Daniyal Tallat"],
+      description: "Developing and maintaining the peer review platform, database infrastructure, and web security."
+    },
+    {
+      title: "Outreach & Student Relations",
       icon: Share2,
+      badge: "Community Engagement",
+      badgeColor: "bg-rose-50 text-rose-700 border-rose-200",
+      iconBg: "bg-rose-100 text-rose-600",
       members: ["Noor ul Huda Pervaiz", "Nawall Shehraz"],
-      color: "from-pink-500 to-rose-600",
+      description: "Engaging student writers across universities, managing social channels, and guiding manuscript submissions."
     },
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100 py-20 px-6 flex flex-col items-center">
-      {/* ====== HEADER ====== */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="text-center mb-16"
-      >
-        <h1 className="text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
-          Meet Our Team
-        </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          The passionate individuals who bring{" "}
-          <span className="font-semibold">The College Periodical</span> to life —
-          every article, every edition.
-        </p>
-        <div className="mt-6 h-1 w-24 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto rounded-full" />
-      </motion.div>
+    <div className="min-h-screen bg-white text-slate-800 font-sans antialiased selection:bg-blue-600 selection:text-white">
+      
+      {/* ==================== HEADER NAVBAR ==================== */}
+      <header className="border-b border-slate-100 bg-white/95 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex justify-between items-center h-20">
+            
+            <Link href="/" className="flex items-center gap-3 group">
+              <img
+                src="/logo.png"
+                alt="The College Periodical Logo"
+                className="h-12 w-12 sm:h-14 sm:w-14 object-contain transition-transform group-hover:scale-105"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none"
+                }}
+              />
+              <div>
+                <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors">
+                  The College Periodical
+                </h1>
+                <p className="text-[11px] text-blue-600 font-semibold uppercase tracking-wider">
+                  Editorial Board & Team
+                </p>
+              </div>
+            </Link>
 
-      {/* ====== TEAM GRID ====== */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-10 w-full max-w-5xl">
-        {teams.map((team, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: i * 0.1 }}
-            className="flex justify-center"
-          >
-            <Card className="w-full max-w-md hover:shadow-2xl transition-all duration-300 border-none bg-white/80 backdrop-blur-md rounded-2xl">
-              <CardHeader className="pb-3 text-center">
-                <CardTitle
-                  className={`text-xl font-bold bg-gradient-to-r ${team.color} bg-clip-text text-transparent flex justify-center items-center gap-2`}
-                >
-                  <team.icon className="w-5 h-5" /> {team.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col items-center gap-2">
-                {team.members.map((member, idx) => (
-                  <p
-                    key={idx}
-                    className="text-gray-800 font-medium hover:text-blue-600 transition-colors"
-                  >
-                    {member}
-                  </p>
-                ))}
-              </CardContent>
+            <Link href="/about">
+              <Button
+                variant="outline"
+                className="rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-sm"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                About Us
+              </Button>
+            </Link>
+
+          </div>
+        </div>
+      </header>
+
+
+      {/* ==================== HERO SECTION ==================== */}
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-blue-50/70 via-white to-white border-b border-slate-100">
+        <div className="max-w-4xl mx-auto px-4 text-center space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-100/80 text-blue-800 text-xs font-semibold">
+            <Sparkles className="h-3.5 w-3.5 text-blue-600" /> Meets The Minds Behind The Periodical
+          </div>
+          
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+            Our Editorial & Administrative Team
+          </h1>
+          
+          <p className="text-slate-600 text-base max-w-2xl mx-auto font-normal leading-relaxed">
+            The dedicated team of student editors, administrators, engineers, and outreach leaders bringing every article and edition to publication.
+          </p>
+        </div>
+      </section>
+
+
+      {/* ==================== TEAM GRID ==================== */}
+      <main className="max-w-5xl mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {teams.map((t, i) => (
+            <Card key={i} className="bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all rounded-2xl p-6 sm:p-8 space-y-5 flex flex-col justify-between">
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className={`p-3 rounded-2xl ${t.iconBg}`}>
+                    <t.icon className="h-6 w-6" />
+                  </div>
+                  <Badge variant="outline" className={`text-xs font-semibold ${t.badgeColor}`}>
+                    {t.badge}
+                  </Badge>
+                </div>
+
+                <div>
+                  <h2 className="text-xl font-bold text-slate-900">{t.title}</h2>
+                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">{t.description}</p>
+                </div>
+
+                <div className="pt-2 space-y-2 border-t border-slate-100">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Team Members:</span>
+                  <div className="flex flex-wrap gap-2">
+                    {t.members.map((m, idx) => (
+                      <span
+                        key={idx}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 text-xs font-semibold border border-slate-200/60"
+                      >
+                        <UserCheck className="h-3.5 w-3.5 text-blue-600" />
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
             </Card>
-          </motion.div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </main>
+
+
+      {/* ==================== FOOTER ==================== */}
+      <footer className="py-10 border-t border-slate-100 text-center text-xs text-slate-500">
+        <div className="max-w-4xl mx-auto px-4 space-y-3">
+          <p className="font-semibold text-slate-700">The College Periodical</p>
+          <p>© {new Date().getFullYear()} All Rights Reserved. Editorial & Team Directory.</p>
+        </div>
+      </footer>
+
     </div>
   )
 }

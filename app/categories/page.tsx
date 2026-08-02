@@ -8,10 +8,20 @@ export default function AboutPage() {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Header */}
       <header className="border-b bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
-            About <span className="text-blue-700">The College Periodical</span>
-          </h1>
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center">
+            <img
+              src="/logo.png"
+              alt="The College Periodical Logo"
+              className="h-12 w-12 sm:h-16 sm:w-16 mr-3 object-contain hover:scale-105 transition-transform"
+              onError={(e) => {
+                e.currentTarget.style.display = "none"
+              }}
+            />
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+              Publication Flow <span className="text-blue-700 font-semibold">| The College Periodical</span>
+            </h1>
+          </Link>
           <Link
             href="/"
             className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"

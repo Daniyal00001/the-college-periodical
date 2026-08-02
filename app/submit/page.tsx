@@ -42,7 +42,7 @@ export default function SubmitArticle() {
   const [submitted, setSubmitted] = useState(false)
   const [submittedEmail, setSubmittedEmail] = useState("")
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
     if (!formData.category) {
@@ -84,9 +84,9 @@ export default function SubmitArticle() {
         excerpt: "",
         tags: "",
       })
-    } catch (err) {
+    } catch (err: any) {
       console.error("Submit error:", err)
-      alert("Error: " + err.message)
+      alert("Error: " + (err.message || "Failed to submit"))
     } finally {
       setIsSubmitting(false)
     }
@@ -122,19 +122,19 @@ export default function SubmitArticle() {
         trackingNumber: "",
         content: "",
       })
-    } catch (err) {
+    } catch (err: any) {
       console.error("Resubmit error:", err)
-      alert("Error: " + err.message)
+      alert("Error: " + (err.message || "Failed to resubmit"))
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleResubmitChange = (field, value) => {
+  const handleResubmitChange = (field: string, value: string) => {
     setResubmitData((prev) => ({ ...prev, [field]: value }))
   }
 

@@ -101,7 +101,14 @@ export default function TrackingPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <Link href="/" className="flex items-center">
-                <BookOpen className="h-8 w-8 text-blue-600 mr-3" />
+                <img
+                  src="/logo.png"
+                  alt="The College Periodical Logo"
+                  className="h-12 w-12 sm:h-16 sm:w-16 mr-3 object-contain hover:scale-105 transition-transform"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none"
+                  }}
+                />
                 <h1 className="text-xl font-bold text-gray-900">The College Periodical</h1>
               </Link>
               <Link href="/">
@@ -144,7 +151,14 @@ export default function TrackingPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center">
-              <BookOpen className="h-8 w-8 text-blue-600 mr-3" />
+              <img
+                src="/logo.png"
+                alt="The College Periodical Logo"
+                className="h-12 w-12 sm:h-16 sm:w-16 mr-3 object-contain hover:scale-105 transition-transform"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none"
+                }}
+              />
               <h1 className="text-xl font-bold text-gray-900">The College Periodical</h1>
             </Link>
             <Link href="/">

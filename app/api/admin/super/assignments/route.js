@@ -1,11 +1,14 @@
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server"
+import { getAuthUser } from "@/lib/auth"
 import db from "@/lib/db"
 
-export async function GET() {
-  console.log("API Get Assignments")
+export async function GET(req) {
   try {
+    const { errorResponse } = await getAuthUser(req, ['super_admin'])
+    if (errorResponse) return errorResponse
+
     const [rows] = await db.query(`
       SELECT 
         aa.id,
@@ -17,9 +20,9 @@ export async function GET() {
         s.category,
         s.assignment_status,
         s.status,
-        s.author_name,            -- NEW
-        s.author_email,           -- NEW (optional, you can remove if unused)
-        s.tracking_number,        -- NEW
+        s.author_name,
+        s.author_email,
+        s.tracking_number,
         au.name AS reviewer_name
       FROM article_assignments aa
       JOIN article_submissions s ON aa.submission_id = s.id
@@ -27,7 +30,6 @@ export async function GET() {
       ORDER BY aa.assigned_at DESC
     `);
 
-    console.log("Assignments fetched:", rows.length);
     return NextResponse.json(rows);
   } catch (err) {
     console.error("DB Error:", err);

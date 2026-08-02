@@ -1,117 +1,145 @@
 "use client"
 
-import { useState } from "react"
-import { BookOpen, X, ChevronDown } from "lucide-react"
+import { useState, useEffect } from "react"
+import {
+  ChevronDown,
+  X,
+  ArrowRight,
+  Sparkles,
+  BookOpen,
+  Users,
+  ExternalLink
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const [featuredArticles, setFeaturedArticles] = useState<any[]>([])
+  const [loadingArticles, setLoadingArticles] = useState(true)
+
+  useEffect(() => {
+    async function fetchFeatured() {
+      try {
+        const res = await fetch("/api/articles")
+        if (res.ok) {
+          const data = await res.json()
+          setFeaturedArticles(Array.isArray(data) ? data.slice(0, 2) : [])
+        }
+      } catch (err) {
+        console.error("Failed to fetch featured articles:", err)
+      } finally {
+        setLoadingArticles(false)
+      }
+    }
+    fetchFeatured()
+  }, [])
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <Link href="/" className="flex items-center">
+    <div className="min-h-screen bg-white text-slate-800 font-sans antialiased selection:bg-blue-600 selection:text-white">
+      
+      {/* ==================== SIMPLE SLEEK HEADER WITH DROPDOWN ==================== */}
+      <header className="border-b border-slate-100 bg-white/95 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex justify-between items-center h-20">
+            
+            {/* Logo + Title */}
+            <Link href="/" className="flex items-center gap-3 group">
               <img
                 src="/logo.png"
-                alt="The College Periodical"
-                className="h-20 w-20 mr-2 object-contain"
-                onError={(e) => e.currentTarget.style.display = "none"}
+                alt="The College Periodical Logo"
+                className="h-12 w-12 sm:h-14 sm:w-14 object-contain transition-transform group-hover:scale-105"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none"
+                }}
               />
-              <h1 className="text-2xl font-semibold text-gray-900">The College Periodical</h1>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors">
+                  The College Periodical
+                </h1>
+                <p className="text-[11px] text-blue-600 font-semibold uppercase tracking-wider">
+                  Academic Student Journal
+                </p>
+              </div>
             </Link>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center space-x-1">
-              {/* Instructions Dropdown */}
-              <div 
-                className="relative group"
-                onMouseEnter={() => setActiveDropdown("instructions")}
-                onMouseLeave={() => setActiveDropdown(null)}
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-6">
+              
+              <Link
+                href="/guidelines"
+                className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors py-2"
               >
-                <button className="px-4 py-2 text-gray-700 hover:text-blue-700 font-medium flex items-center gap-1">
-                  Instructions
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-                {activeDropdown === "instructions" && (
-                  <div className="absolute left-0 mt-0 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
-                    <Link href="/guidelines" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                      Guidelines
-                    </Link>
-                    <Link href="/categories" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                      Publication Flow
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              {/* Submit Article */}
-              <Link href="/submit" className="px-4 py-2 text-gray-700 hover:text-blue-700 font-medium">
-                Submit
+                Guidelines
               </Link>
 
-              {/* Articles */}
-              <Link href="/articles" className="px-4 py-2 text-gray-700 hover:text-blue-700 font-medium">
+              <Link
+                href="/articles"
+                className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors py-2"
+              >
                 Articles
               </Link>
 
-              {/* Issues Dropdown */}
-              <div 
-                className="relative group"
-                onMouseEnter={() => setActiveDropdown("issues")}
+              <Link
+                href="/issues/december-2025"
+                className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors flex items-center gap-1 py-2"
+              >
+                <span>❄️</span> Dec 2025
+              </Link>
+
+              {/* ABOUT US WITH HOVER DROPDOWN */}
+              <div
+                className="relative py-2"
+                onMouseEnter={() => setActiveDropdown("about")}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
-                <button className="px-4 py-2 text-gray-700 hover:text-blue-700 font-medium flex items-center gap-1">
-                  Issues
-                  <ChevronDown className="h-4 w-4" />
+                <button className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors flex items-center gap-1 focus:outline-none">
+                  About Us
+                  <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
                 </button>
-                {activeDropdown === "issues" && (
-                  <div className="absolute left-0 mt-0 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
-                    <Link href="/issues/december-2025" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                      December 2025
+
+                {activeDropdown === "about" && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200 py-2 z-50 p-1">
+                    <Link
+                      href="/about"
+                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+                    >
+                      <BookOpen className="h-4 w-4 text-blue-600" />
+                      About The Periodical
+                    </Link>
+                    <Link
+                      href="/about/team"
+                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+                    >
+                      <Users className="h-4 w-4 text-indigo-600" />
+                      Meet Our Editorial Team
                     </Link>
                   </div>
                 )}
               </div>
 
-              {/* About Dropdown */}
-         <div 
-  className="relative group"
-  onMouseEnter={() => setActiveDropdown("about")}
-  onMouseLeave={() => setActiveDropdown(null)}
->
-  <button className="px-4 py-2 text-gray-700 hover:text-blue-700 font-medium flex items-center gap-1">
-    About
-    <ChevronDown className="h-4 w-4" />
-  </button>
-  {activeDropdown === "about" && (
-    <div className="absolute right-0 mt-0 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-      <Link
-        href="/about/team"
-        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-      >
-        About Our Team
-      </Link>
-      <Link
-        href="/about"
-        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-      >
-        About Us
-      </Link>
-    </div>
-  )}
-</div>
+              {/* Action Buttons */}
+              <div className="flex items-center gap-3 pl-4 border-l border-slate-200">
+                <Link href="/submit">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm px-5 shadow-sm">
+                    Submit Paper
+                  </Button>
+                </Link>
+                <Link href="/login">
+                  <Button variant="ghost" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
+                    Login
+                  </Button>
+                </Link>
+              </div>
 
             </nav>
 
-            {/* Mobile Hamburger */}
+            {/* Mobile Hamburger Toggle */}
             <button
-              className="md:hidden p-2 text-gray-700 hover:text-blue-700"
+              className="md:hidden p-2 text-slate-600 hover:text-blue-600 rounded-lg"
               onClick={() => setMenuOpen(!menuOpen)}
             >
               {menuOpen ? <X className="h-6 w-6" /> : (
@@ -120,179 +148,205 @@ export default function HomePage() {
                 </svg>
               )}
             </button>
+
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Dropdown */}
         {menuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-200">
-            <div className="px-4 py-3 space-y-2">
-              <details className="group">
-                <summary className="font-medium text-gray-700 cursor-pointer list-none">Instructions</summary>
-                <div className="ml-4 mt-2 space-y-2">
-                  <Link href="/guidelines" className="block text-gray-600" onClick={() => setMenuOpen(false)}>Guidelines</Link>
-                  <Link href="/categories" className="block text-gray-600" onClick={() => setMenuOpen(false)}>Publication Flow</Link>
-                </div>
-              </details>
-              <Link href="/submit" className="block text-gray-700" onClick={() => setMenuOpen(false)}>Submit Article</Link>
-              <Link href="/articles" className="block text-gray-700" onClick={() => setMenuOpen(false)}>Articles</Link>
-              <details className="group">
-                <summary className="font-medium text-gray-700 cursor-pointer list-none">Issues</summary>
-                <div className="ml-4 mt-2">
-                  <Link href="/issues/december-2025" className="block text-gray-600" onClick={() => setMenuOpen(false)}>December 2025</Link>
-                </div>
-              </details>
-              <details className="group">
-                <summary className="font-medium text-gray-700 cursor-pointer list-none">About</summary>
-                <div className="ml-4 mt-2 space-y-2">
-                  <Link href="/about/team" className="block text-gray-600" onClick={() => setMenuOpen(false)}>About Our Team</Link>
-                  <Link href="/about" className="block text-gray-600" onClick={() => setMenuOpen(false)}>About Us</Link>
-                </div>
-              </details>
-            </div>
+          <div className="md:hidden bg-white border-t border-slate-100 px-4 py-4 space-y-3 shadow-lg">
+            <Link href="/submit" className="block w-full py-2.5 text-center bg-blue-600 text-white font-semibold rounded-xl" onClick={() => setMenuOpen(false)}>
+              Submit Paper
+            </Link>
+            <Link href="/guidelines" className="block text-slate-700 font-medium text-sm" onClick={() => setMenuOpen(false)}>
+              Submission Guidelines
+            </Link>
+            <Link href="/articles" className="block text-slate-700 font-medium text-sm" onClick={() => setMenuOpen(false)}>
+              Browse Articles
+            </Link>
+            <Link href="/issues/december-2025" className="block text-slate-700 font-medium text-sm" onClick={() => setMenuOpen(false)}>
+              December 2025 Issue
+            </Link>
+            <Link href="/about" className="block text-slate-700 font-medium text-sm" onClick={() => setMenuOpen(false)}>
+              About Us
+            </Link>
+            <Link href="/about/team" className="block text-slate-700 font-medium text-sm pl-4 text-blue-600" onClick={() => setMenuOpen(false)}>
+              ↳ Meet Our Editorial Team
+            </Link>
+            <Link href="/login" className="block text-slate-700 font-medium text-sm" onClick={() => setMenuOpen(false)}>
+              Portal Login
+            </Link>
           </div>
         )}
       </header>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-gray-100 via-blue-50 to-gray-100 py-16">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-semibold text-gray-900 mb-4">
-            Your Voice, Your Stories, Your Campus
-          </h2>
-          <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
-            The College Periodical is your platform to share ideas, experiences, and insights that matter.
+
+      {/* ==================== SLEEK HERO SECTION ==================== */}
+      <section className="py-20 sm:py-28 bg-gradient-to-b from-blue-50/60 via-white to-white">
+        <div className="max-w-4xl mx-auto px-4 text-center space-y-6">
+          
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-100/80 text-blue-800 text-xs font-semibold">
+            <Sparkles className="h-3.5 w-3.5 text-blue-600" />
+            Double-Anonymized Peer-Reviewed Journal
+          </div>
+
+          <h1 className="text-4xl sm:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            Your Voice. Your Research. <br />
+            <span className="text-blue-600">Your Periodical.</span>
+          </h1>
+
+          <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto font-normal leading-relaxed">
+            The College Periodical provides students a platform to publish analytical essays, legal reviews, and opinion pieces through double-blind peer review.
           </p>
-          <div className="flex gap-4 justify-center">
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <Link href="/submit">
-              <Button size="lg" className="bg-blue-700 hover:bg-blue-800">Submit Your Article</Button>
+              <Button size="lg" className="w-full sm:w-auto h-12 px-7 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm">
+                Submit Your Article <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </Link>
             <Link href="/articles">
-              <Button variant="outline" size="lg">Browse Articles</Button>
+              <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 px-7 rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold">
+                Browse Articles
+              </Button>
+            </Link>
+          </div>
+
+          {/* Simple 3 Key Metrics */}
+          <div className="grid grid-cols-3 gap-4 pt-12 border-t border-slate-100 max-w-2xl mx-auto">
+            <div>
+              <div className="text-2xl font-bold text-slate-900">100%</div>
+              <div className="text-xs text-slate-500 font-medium">Double-Blind</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-slate-900">4 Issues</div>
+              <div className="text-xs text-slate-500 font-medium">Per Year</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-slate-900">2-4 Wks</div>
+              <div className="text-xs text-slate-500 font-medium">Review Time</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* ==================== ABOUT PLATFORM CARD (LIGHT BLUE) ==================== */}
+      <section className="max-w-4xl mx-auto px-4 -mt-6">
+        <div className="p-6 sm:p-8 bg-blue-50/90 border border-blue-200 text-slate-900 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+          <div className="space-y-1.5 text-center sm:text-left">
+            <div className="text-xs text-blue-700 font-bold uppercase tracking-wider flex items-center gap-1 justify-center sm:justify-start">
+              <Sparkles className="h-3.5 w-3.5 text-blue-600" /> About Our Platform
+            </div>
+            <h3 className="text-xl font-bold text-slate-900">
+              Bridging Undergraduate Thought & Published Scholarship
+            </h3>
+            <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">
+              The Periodical fosters critical inquiry across law, politics, social sciences, and humanities through double-anonymized peer review. 
+              Our mission is to bridge undergraduate writing capacities with established academic publication standards, providing a structured, 
+              constructive platform for student scholars to publish high-quality opinion essays, legal reviews, institutional critiques, and analytical research pieces.
+            </p>
+          </div>
+          <Link href="/about">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-xs h-10 px-5 shadow-sm flex-shrink-0">
+              Learn More About Us →
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+
+      {/* ==================== FEATURED PUBLICATIONS ==================== */}
+      <section className="py-20 max-w-4xl mx-auto px-4">
+        
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-2xl font-extrabold text-slate-900">Featured Publications</h2>
+            <p className="text-xs text-slate-500 mt-0.5">Explore recent articles reviewed and published by our editorial team</p>
+          </div>
+          <Link href="/articles" className="text-xs font-semibold text-blue-600 hover:underline flex items-center gap-1">
+            All Articles <ExternalLink className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        {loadingArticles ? (
+          <div className="text-center py-12 text-slate-400 text-sm">Loading articles...</div>
+        ) : featuredArticles.length > 0 ? (
+          <div className="space-y-4">
+            {featuredArticles.map((article) => (
+              <Card
+                key={article.id}
+                className="bg-white border-slate-200 hover:border-blue-300 transition-all rounded-xl p-5 shadow-none hover:shadow-sm"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="bg-blue-50 text-blue-700 text-[11px] font-semibold">
+                        {article.category_name || article.category}
+                      </Badge>
+                      <span className="text-[11px] text-slate-400">
+                        {article.published_at ? new Date(article.published_at).toLocaleDateString() : ""}
+                      </span>
+                    </div>
+                    <Link href={`/article/${article.slug}`}>
+                      <h3 className="text-base font-bold text-slate-900 hover:text-blue-600 transition-colors">
+                        {article.title}
+                      </h3>
+                    </Link>
+                    <p className="text-xs text-slate-600 line-clamp-2">
+                      {article.excerpt || (article.content ? article.content.substring(0, 140) + "..." : "")}
+                    </p>
+                  </div>
+                  <Link href={`/article/${article.slug}`} className="flex-shrink-0">
+                    <span className="text-xs font-semibold text-blue-600 hover:underline">Read →</span>
+                  </Link>
+                </div>
+              </Card>
+            ))}
+
+            <div className="pt-2 text-center">
+              <Link href="/articles" className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline">
+                View All Published Articles <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-slate-50 rounded-xl border border-slate-200 text-slate-500">
+            <BookOpen className="h-8 w-8 text-slate-400 mx-auto mb-2 opacity-60" />
+            <p className="font-semibold text-slate-800 text-sm">Articles are currently under peer review.</p>
+            <p className="text-xs text-slate-500 mt-1">Check back soon or submit your manuscript!</p>
+          </div>
+        )}
+
+      </section>
+
+
+      {/* ==================== SIMPLE SUBMIT CALLOUT ==================== */}
+      <section className="py-16 bg-slate-50 border-t border-slate-100 text-center">
+        <div className="max-w-2xl mx-auto px-4 space-y-4">
+          <h2 className="text-2xl font-bold text-slate-900">Ready to publish your work?</h2>
+          <p className="text-xs text-slate-600 leading-relaxed">
+            We welcome opinion essays, book reviews, law papers, and analytical non-fiction articles from undergraduate students.
+          </p>
+          <div className="pt-2">
+            <Link href="/submit">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm px-6 h-11 shadow-sm">
+                Submit Your Paper
+              </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Rest of homepage content... */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-semibold text-gray-900 mb-12">Our Startup Journey</h2>
-          <div className="flex justify-center">
-            <div className="p-6 bg-gray-50 rounded-xl shadow-sm w-64">
-              <div className="text-3xl font-bold text-gray-900 mb-2">2025</div>
-              <div className="text-gray-600">Year We Started</div>
-            </div>
-          </div>
-          <p className="text-gray-600 mt-10 max-w-2xl mx-auto">
-            We've just begun our journey — every new article, writer, and reader brings us closer to building a thriving creative community.
-          </p>
+
+      {/* ==================== FOOTER ==================== */}
+      <footer className="py-10 border-t border-slate-100 text-center text-xs text-slate-500">
+        <div className="max-w-4xl mx-auto px-4 space-y-3">
+          <p className="font-semibold text-slate-700">The College Periodical</p>
+          <p>© {new Date().getFullYear()} All Rights Reserved. Empowering student scholarship.</p>
         </div>
-      </section>
-
-
-      
-
-      <section className="py-24 bg-gray-100 text-center">
-        <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">Submissions Are Open Now!</h2>
-          <p className="text-lg text-gray-700">
-            Share your voice with The College Periodical — a platform for creative, critical, and thoughtful student writing.
-          </p>
-        </div>
-      </section>
-
-      {/* Footer */}
-<footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-gray-300 py-16">
-  <div className="max-w-7xl mx-auto px-6">
-    
-    {/* ====== GRID AREA ====== */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left items-start">
-      
-      {/* Column 1 - Brand */}
-      <div className="flex flex-col items-center md:items-start space-y-4">
-        <h4 className="text-2xl font-bold text-white tracking-tight">
-          The College Periodical
-        </h4>
-        <p className="text-gray-400 leading-relaxed max-w-sm">
-          Empowering student voices and fostering meaningful conversations through creativity and expression.
-        </p>
-      </div>
-
-      {/* Column 2 - Links */}
-      <div className="flex flex-col items-center space-y-4">
-        <h5 className="text-lg font-semibold text-white">Quick Links</h5>
-        <ul className="space-y-2">
-          <li><Link href="/articles" className="hover:text-blue-400 transition-colors">All Articles</Link></li>
-          <li><Link href="/submit" className="hover:text-blue-400 transition-colors">Submit Article</Link></li>
-          <li><Link href="/about" className="hover:text-blue-400 transition-colors">About Us</Link></li>
-          <li><Link href="/about/team" className="hover:text-blue-400 transition-colors">Our Team</Link></li>
-        </ul>
-      </div>
-
-      {/* Column 3 - Contact & Social */}
-      <div className="flex flex-col items-center md:items-end space-y-4">
-        <h5 className="text-lg font-semibold text-white">Contact</h5>
-        <a
-          href="mailto:thecollegeperiodical@gmail.com"
-          className="text-gray-400 hover:text-blue-400 transition-colors"
-        >
-          thecollegeperiodical@gmail.com
-        </a>
-   <div className="flex justify-center md:justify-end gap-6 mt-2">
-  {/* Instagram */}
-  <a
-    href="https://www.instagram.com/thecollegeperiodical?igsh=MXUzb2k0d3loeGZ3NQ=="
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex items-center justify-center w-12 h-12 rounded-full bg-white/20 hover:bg-white/30 transition-transform transform hover:scale-110"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="white"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-6 w-6"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-    </svg>
-  </a>
-
-  {/* Facebook */}
-  <a
-    href="https://www.facebook.com/share/16JcDSk5Rf/?mibextid=wwXIfr"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex items-center justify-center w-12 h-12 rounded-full bg-white/20 hover:bg-white/30 transition-transform transform hover:scale-110"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="white"
-      className="h-6 w-6"
-    >
-      <path d="M22 12a10 10 0 1 0-11.5 9.9v-7H8v-3h2.5V9.5c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.3.2 2.3.2v2.6h-1.3c-1.3 0-1.7.8-1.7 1.6V12H17l-.4 3h-2.9v7A10 10 0 0 0 22 12z" />
-    </svg>
-  </a>
-</div>
-
-      </div>
-    </div>
-
-    {/* ====== Bottom Line ====== */}
-    <div className="border-t border-gray-700 mt-12 pt-6 text-center">
-      <p className="text-sm text-gray-500">
-        © {new Date().getFullYear()} The College Periodical — All Rights Reserved.
-      </p>
-    </div>
-  </div>
-</footer>
-
+      </footer>
 
     </div>
   )

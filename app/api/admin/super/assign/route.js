@@ -1,24 +1,19 @@
 import { NextResponse } from "next/server"
+import { getAuthUser } from "@/lib/auth"
 import db from "@/lib/db"
 
 export async function POST(req) {
-  console.log("API Assign Article to Reviewerrrrrrrrrrrrr")
   try {
-    const { submissionId, reviewerId, assignedBy } = await req.json()
+    const { user: authUser, errorResponse } = await getAuthUser(req, ['super_admin'])
+    if (errorResponse) return errorResponse
 
-    if (!submissionId || !reviewerId || !assignedBy) {
+    const { submissionId, reviewerId } = await req.json()
+
+    if (!submissionId || !reviewerId) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    // Check if already assigned
-    // const [existing] = await db.query(
-    //   `SELECT id FROM article_assignments WHERE submission_id = ?`,
-    //   [submissionId]
-    // )
-
-    // if (existing && existing.length > 0) {
-    //   return NextResponse.json({ error: "Article already assigned" }, { status: 400 })
-    // }
+    const assignedBy = authUser.userId
 
     // Create assignment
     await db.query(
@@ -35,7 +30,6 @@ export async function POST(req) {
       [submissionId]
     )
 
-    console.log("Article assigned successfully")
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error("Assign Error:", err)

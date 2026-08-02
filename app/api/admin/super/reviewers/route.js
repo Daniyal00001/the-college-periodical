@@ -1,10 +1,14 @@
 export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server"
+import { getAuthUser } from "@/lib/auth"
 import db from "@/lib/db"
 
-export async function GET() {
-  console.log("API Get Reviewers")
+export async function GET(req) {
   try {
+    const { errorResponse } = await getAuthUser(req, ['super_admin'])
+    if (errorResponse) return errorResponse
+
     const [rows] = await db.query(`
       SELECT id, name, email, role
       FROM auth_users
@@ -12,7 +16,6 @@ export async function GET() {
       ORDER BY name ASC
     `)
 
-    console.log("Reviewers fetched:", rows.length)
     return NextResponse.json(rows)
   } catch (err) {
     console.error("DB Error:", err)

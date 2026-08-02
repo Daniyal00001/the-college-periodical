@@ -8,6 +8,7 @@ import {
   Sparkles,
   BookOpen,
   Users,
+  ShieldCheck,
   ExternalLink
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -181,6 +182,15 @@ export default function HomePage() {
       </header>
 
 
+      {/* ==================== NOTICE BANNER BELOW NAVBAR ==================== */}
+      <div className="bg-slate-900 text-slate-200 text-xs py-2.5 px-4 text-center border-b border-slate-800 flex items-center justify-center gap-2">
+        <ShieldCheck className="h-4 w-4 text-blue-400 flex-shrink-0" />
+        <span>
+          <strong>Notice:</strong> The Portal Login is for <strong>Journal Administration & Peer Reviewers</strong>. Readers and contributors can browse articles or submit manuscripts without logging in.
+        </span>
+      </div>
+
+
       {/* ==================== SLEEK HERO SECTION ==================== */}
       <section className="py-20 sm:py-28 bg-gradient-to-b from-blue-50/60 via-white to-white">
         <div className="max-w-4xl mx-auto px-4 text-center space-y-6">
@@ -249,7 +259,7 @@ export default function HomePage() {
             </p>
           </div>
           <Link href="/about">
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-xs h-10 px-5 shadow-sm flex-shrink-0">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-xs h-10 px-5 shadow-sm flex-shrink-0">
               Learn More About Us →
             </Button>
           </Link>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Eye, Send, BookOpen, LogOut, Clock, CheckCircle } from "lucide-react"
+import { Eye, Send, LogOut, Clock, CheckCircle, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -132,85 +132,113 @@ export default function ReviewerDashboard() {
   const reviewedAssignments = assignments.filter(a => a.reviewer_status === "reviewed")
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-white sticky top-0 z-40 shadow-sm">
+    <div className="min-h-screen bg-slate-50/50 text-slate-800 font-sans antialiased selection:bg-blue-600 selection:text-white">
+      
+      {/* ==================== STANDARDIZED HEADER NAVBAR ==================== */}
+      <header className="border-b border-slate-200/80 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center min-w-0">
-              <Link href="/">
-                <img
-                  src="/logo.png"
-                  alt="The College Periodical Logo"
-                  className="h-10 w-10 sm:h-12 sm:w-12 mr-2.5 sm:mr-3 object-contain hover:scale-105 transition-transform flex-shrink-0"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none"
-                  }}
-                />
-              </Link>
+          <div className="flex justify-between items-center h-20">
+            
+            {/* Logo + Title */}
+            <Link href="/" className="flex items-center gap-3 group min-w-0">
+              <img
+                src="/logo.png"
+                alt="The College Periodical Logo"
+                className="h-12 w-12 sm:h-14 sm:w-14 object-contain transition-transform group-hover:scale-105 flex-shrink-0"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none"
+                }}
+              />
               <div className="min-w-0">
-                <h1 className="text-base sm:text-xl font-bold text-gray-900 truncate">Reviewer Dashboard</h1>
-                <p className="text-xs text-gray-500 truncate">Welcome, {user?.name}</p>
+                <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors truncate">
+                  The College Periodical
+                </h1>
+                <p className="text-[11px] text-blue-600 font-semibold uppercase tracking-wider truncate">
+                  Peer Reviewer Portal
+                </p>
               </div>
+            </Link>
+
+            {/* Right Action: User Info & Logout Pill Button */}
+            <div className="flex items-center gap-3 flex-shrink-0">
+              {user && (
+                <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50 text-blue-800 text-xs font-semibold border border-blue-100">
+                  <ShieldCheck className="h-4 w-4 text-blue-600" />
+                  <span>{user.name}</span>
+                </div>
+              )}
+              <Button
+                variant="outline"
+                onClick={handleLogout}
+                className="rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-sm h-10 px-4"
+              >
+                <LogOut className="h-4 w-4 mr-2 text-slate-500" />
+                Logout
+              </Button>
             </div>
-            <Button variant="outline" onClick={handleLogout} className="text-xs sm:text-sm px-2.5 sm:px-4 py-1 sm:py-2 flex-shrink-0 rounded-xl">
-              <LogOut className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-              Logout
-            </Button>
+
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
-        {/* Stats */}
+      {/* ==================== DASHBOARD CONTENT ==================== */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        
+        {/* Minimal Stats */}
         <div className="grid grid-cols-2 gap-4 sm:gap-6">
-          <Card className="rounded-2xl shadow-sm">
+          <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm hover:shadow transition-all">
             <CardHeader className="flex flex-row items-center justify-between pb-2 p-4">
-              <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">Pending Reviews</CardTitle>
-              <Clock className="h-4 w-4 text-muted-foreground hidden sm:block" />
+              <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pending Reviews</CardTitle>
+              <Clock className="h-4 w-4 text-amber-500 hidden sm:block" />
             </CardHeader>
             <CardContent className="p-4 pt-0">
-              <div className="text-2xl sm:text-3xl font-bold text-yellow-600">{pendingAssignments.length}</div>
-              <p className="text-xs text-muted-foreground mt-0.5">Articles to review</p>
+              <div className="text-3xl font-extrabold text-amber-600">{pendingAssignments.length}</div>
+              <p className="text-xs text-slate-500 mt-0.5">Manuscripts awaiting your evaluation</p>
             </CardContent>
           </Card>
-          <Card className="rounded-2xl shadow-sm">
+
+          <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm hover:shadow transition-all">
             <CardHeader className="flex flex-row items-center justify-between pb-2 p-4">
-              <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">Completed Reviews</CardTitle>
-              <CheckCircle className="h-4 w-4 text-muted-foreground hidden sm:block" />
+              <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-wider">Completed Reviews</CardTitle>
+              <CheckCircle className="h-4 w-4 text-emerald-500 hidden sm:block" />
             </CardHeader>
             <CardContent className="p-4 pt-0">
-              <div className="text-2xl sm:text-3xl font-bold text-green-600">{reviewedAssignments.length}</div>
-              <p className="text-xs text-muted-foreground mt-0.5">Reviews submitted</p>
+              <div className="text-3xl font-extrabold text-emerald-600">{reviewedAssignments.length}</div>
+              <p className="text-xs text-slate-500 mt-0.5">Reviews submitted to editorial board</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Pending Reviews */}
-        <Card className="rounded-2xl overflow-hidden shadow-sm">
-          <CardHeader>
-            <CardTitle>Assigned Articles</CardTitle>
-            <CardDescription>Review these articles and provide your feedback</CardDescription>
+        {/* Pending Reviews Table */}
+        <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm overflow-hidden">
+          <CardHeader className="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+            <CardTitle className="text-base font-bold text-slate-900">Assigned Articles</CardTitle>
+            <CardDescription className="text-xs text-slate-500">Review assigned articles and provide constructive academic feedback</CardDescription>
           </CardHeader>
-          <CardContent className="p-0 sm:p-6">
+          <CardContent className="p-0">
             <div className="overflow-x-auto w-full">
-              <Table className="min-w-[600px]">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Assigned Date</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
+              <Table className="min-w-[650px]">
+                <TableHeader className="bg-slate-50/80">
+                  <TableRow className="border-slate-100">
+                    <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Title</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Category</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Assigned Date</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Status</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {pendingAssignments.map((assignment) => (
-                    <TableRow key={assignment.id}>
-                      <TableCell className="font-medium max-w-[200px] truncate">{assignment.title}</TableCell>
-                      <TableCell><Badge variant="outline">{assignment.category}</Badge></TableCell>
-                      <TableCell>{new Date(assignment.assigned_at).toLocaleDateString()}</TableCell>
+                    <TableRow key={assignment.id} className="border-slate-100 hover:bg-slate-50/40 transition-colors">
+                      <TableCell className="font-semibold text-slate-900 max-w-[220px] truncate">{assignment.title}</TableCell>
                       <TableCell>
-                        <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+                        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-[11px] font-semibold">
+                          {assignment.category}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-slate-500 text-xs">{new Date(assignment.assigned_at).toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        <Badge className="bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-semibold">Pending</Badge>
                       </TableCell>
                       <TableCell>
                         <Dialog>
@@ -222,55 +250,55 @@ export default function ReviewerDashboard() {
                                 setSelectedArticle(assignment)
                                 setRemarks(assignment.reviewer_remarks || "")
                               }}
-                              className="rounded-lg text-xs"
+                              className="rounded-xl border-slate-200 text-slate-700 hover:bg-blue-50 hover:text-blue-600 text-xs font-semibold"
                             >
                               <Eye className="h-4 w-4 mr-1.5" />
-                              Review
+                              Review Paper
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto rounded-2xl">
-                            <DialogHeader>
-                              <DialogTitle>{selectedArticle?.title}</DialogTitle>
-                              <DialogDescription>
-                                Category: {selectedArticle?.category}
+                          <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto rounded-3xl p-6 sm:p-8">
+                            <DialogHeader className="border-b border-slate-100 pb-4">
+                              <DialogTitle className="text-xl font-extrabold text-slate-900">{selectedArticle?.title}</DialogTitle>
+                              <DialogDescription className="text-xs text-slate-500">
+                                Category: <span className="font-semibold text-slate-700">{selectedArticle?.category}</span>
                               </DialogDescription>
                             </DialogHeader>
-                            <div className="space-y-4">
-                              <div className="bg-blue-50 border border-blue-200 p-3 rounded-xl text-xs text-blue-800 leading-relaxed">
-                                🔒 <strong>Double-Blind Review:</strong> Author details are hidden to ensure unbiased evaluation.
+                            <div className="space-y-5 pt-4">
+                              <div className="bg-blue-50/80 border border-blue-200/80 p-3.5 rounded-2xl text-xs text-blue-900 leading-relaxed font-medium">
+                                🔒 <strong>Double-Blind Review Policy:</strong> Author names and email details are hidden to maintain unbiased peer evaluation.
                               </div>
                               
                               <div>
-                                <h4 className="font-semibold text-xs text-gray-500 uppercase tracking-wider mb-1">Excerpt</h4>
-                                <p className="text-gray-700 text-sm leading-relaxed">{selectedArticle?.excerpt}</p>
+                                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Abstract / Excerpt</h4>
+                                <p className="text-slate-700 text-sm leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-200/80">{selectedArticle?.excerpt}</p>
                               </div>
                               
                               <div>
-                                <h4 className="font-semibold text-xs text-gray-500 uppercase tracking-wider mb-1">Full Content</h4>
+                                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Full Manuscript</h4>
                                 <div
-                                  className="bg-gray-50 p-4 rounded-xl prose max-w-none text-sm leading-relaxed"
+                                  className="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 prose max-w-none text-sm text-slate-700 leading-relaxed"
                                   dangerouslySetInnerHTML={{
                                     __html: selectedArticle?.content || "",
                                   }}
                                 />
                               </div>
                               
-                              <div className="space-y-2 pt-2 border-t">
-                                <Label htmlFor="remarks" className="font-semibold text-sm">Your Review & Remarks *</Label>
+                              <div className="space-y-2 pt-3 border-t border-slate-100">
+                                <Label htmlFor="remarks" className="font-bold text-sm text-slate-900">Your Peer Review & Remarks *</Label>
                                 <Textarea
                                   id="remarks"
                                   value={remarks}
                                   onChange={(e) => setRemarks(e.target.value)}
-                                  placeholder="Provide detailed feedback about the article quality, accuracy, readability, and your recommendation..."
+                                  placeholder="Provide detailed evaluation of the paper quality, argument coherence, citation validity, and your recommendation..."
                                   rows={5}
-                                  className="rounded-xl text-sm"
+                                  className="rounded-2xl text-sm border-slate-200"
                                 />
                               </div>
                               
                               <Button 
                                 onClick={handleSubmitReview}
                                 disabled={isLoading || !remarks.trim()}
-                                className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 h-11 text-white font-semibold"
+                                className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 h-11 text-white font-semibold shadow-sm"
                               >
                                 {isLoading ? (
                                   <>
@@ -280,7 +308,7 @@ export default function ReviewerDashboard() {
                                 ) : (
                                   <>
                                     <Send className="h-4 w-4 mr-2" />
-                                    Submit Review
+                                    Submit Review to Board
                                   </>
                                 )}
                               </Button>
@@ -294,42 +322,46 @@ export default function ReviewerDashboard() {
               </Table>
             </div>
             {pendingAssignments.length === 0 && (
-              <div className="text-center py-8 text-gray-500 text-sm">
-                No pending articles to review
+              <div className="text-center py-10 text-slate-400 text-xs">
+                No pending articles currently assigned to you for review
               </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Completed Reviews */}
-        <Card className="rounded-2xl overflow-hidden shadow-sm">
-          <CardHeader>
-            <CardTitle>Completed Reviews</CardTitle>
-            <CardDescription>Articles you have already reviewed</CardDescription>
+        {/* Completed Reviews Table */}
+        <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm overflow-hidden">
+          <CardHeader className="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+            <CardTitle className="text-base font-bold text-slate-900">Completed Reviews</CardTitle>
+            <CardDescription className="text-xs text-slate-500">Articles you have already evaluated</CardDescription>
           </CardHeader>
-          <CardContent className="p-0 sm:p-6">
+          <CardContent className="p-0">
             <div className="overflow-x-auto w-full">
-              <Table className="min-w-[500px]">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Your Remarks</TableHead>
+              <Table className="min-w-[550px]">
+                <TableHeader className="bg-slate-50/80">
+                  <TableRow className="border-slate-100">
+                    <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Title</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Category</TableHead>
+                    <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Your Remarks</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {reviewedAssignments.map((assignment) => (
-                    <TableRow key={assignment.id}>
-                      <TableCell className="font-medium max-w-[180px] truncate">{assignment.title}</TableCell>
-                      <TableCell><Badge variant="outline">{assignment.category}</Badge></TableCell>
-                      <TableCell className="max-w-md truncate text-xs text-gray-600">{assignment.reviewer_remarks}</TableCell>
+                    <TableRow key={assignment.id} className="border-slate-100">
+                      <TableCell className="font-semibold text-slate-900 max-w-[200px] truncate text-sm">{assignment.title}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200 text-[10px]">
+                          {assignment.category}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="max-w-md truncate text-xs text-slate-600">{assignment.reviewer_remarks}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </div>
             {reviewedAssignments.length === 0 && (
-              <div className="text-center py-8 text-gray-500 text-sm">
+              <div className="text-center py-10 text-slate-400 text-xs">
                 No completed reviews yet
               </div>
             )}

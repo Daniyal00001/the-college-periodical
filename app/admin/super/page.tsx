@@ -9,6 +9,8 @@ import {
   UserPlus,
   BookOpen,
   LogOut,
+  ShieldCheck,
+  UserCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -235,127 +237,139 @@ export default function SuperAdminDashboard() {
   const reviewedArticles = assignments.filter(
     (a) => a.reviewer_status === "reviewed"
   );
-  const approvedArticles = submissions.filter(
-    (s) => s.assignment_status === "approved"
-  );
-  const rejectedArticles = submissions.filter(
-    (s) => s.assignment_status === "rejected"
-  );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-white sticky top-0 z-40 shadow-sm">
+    <div className="min-h-screen bg-slate-50/50 text-slate-800 font-sans antialiased selection:bg-blue-600 selection:text-white">
+      
+      {/* ==================== STANDARDIZED HEADER NAVBAR ==================== */}
+      <header className="border-b border-slate-200/80 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center min-w-0">
-              <Link href="/">
-                <img
-                  src="/logo.png"
-                  alt="The College Periodical Logo"
-                  className="h-10 w-10 sm:h-12 sm:w-12 mr-2.5 sm:mr-3 object-contain hover:scale-105 transition-transform flex-shrink-0"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-              </Link>
-
+          <div className="flex justify-between items-center h-20">
+            
+            {/* Logo + Title */}
+            <Link href="/" className="flex items-center gap-3 group min-w-0">
+              <img
+                src="/logo.png"
+                alt="The College Periodical Logo"
+                className="h-12 w-12 sm:h-14 sm:w-14 object-contain transition-transform group-hover:scale-105 flex-shrink-0"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
               <div className="min-w-0">
-                <h1 className="text-base sm:text-xl font-bold text-gray-900 truncate">
-                  Super Admin Dashboard
+                <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors truncate">
+                  The College Periodical
                 </h1>
-                <p className="text-xs text-gray-500 truncate">
-                  Welcome, {user?.name}
+                <p className="text-[11px] text-blue-600 font-semibold uppercase tracking-wider truncate">
+                  Super Admin Editorial Portal
                 </p>
               </div>
+            </Link>
+
+            {/* Right Action: User Info & Logout Pill Button */}
+            <div className="flex items-center gap-3 flex-shrink-0">
+              {user && (
+                <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50 text-blue-800 text-xs font-semibold border border-blue-100">
+                  <ShieldCheck className="h-4 w-4 text-blue-600" />
+                  <span>{user.name}</span>
+                </div>
+              )}
+              <Button
+                variant="outline"
+                onClick={handleLogout}
+                className="rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-sm h-10 px-4"
+              >
+                <LogOut className="h-4 w-4 mr-2 text-slate-500" />
+                Logout
+              </Button>
             </div>
 
-            <Button
-              variant="outline"
-              onClick={handleLogout}
-              className="text-xs sm:text-sm px-2.5 sm:px-4 py-1 sm:py-2 flex-shrink-0 rounded-xl"
-            >
-              <LogOut className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-              Logout
-            </Button>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
-          <Card className="rounded-2xl shadow-sm">
+      {/* ==================== DASHBOARD CONTENT ==================== */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        
+        {/* Minimal Stats Bar */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm hover:shadow transition-all">
             <CardHeader className="pb-2 p-4">
-              <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
+              <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                 Unassigned
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 pt-0">
-              <div className="text-2xl sm:text-3xl font-bold text-yellow-600">
+              <div className="text-3xl font-extrabold text-amber-600">
                 {unassignedArticles.length}
               </div>
             </CardContent>
           </Card>
-          <Card className="rounded-2xl shadow-sm">
+
+          <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm hover:shadow transition-all">
             <CardHeader className="pb-2 p-4">
-              <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
+              <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                 Assigned
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 pt-0">
-              <div className="text-2xl sm:text-3xl font-bold text-blue-600">
+              <div className="text-3xl font-extrabold text-blue-600">
                 {assignedArticles.length}
               </div>
             </CardContent>
           </Card>
-          <Card className="rounded-2xl shadow-sm">
+
+          <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm hover:shadow transition-all">
             <CardHeader className="pb-2 p-4">
-              <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
+              <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                 Reviewed
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 pt-0">
-              <div className="text-2xl sm:text-3xl font-bold text-purple-600">
+              <div className="text-3xl font-extrabold text-indigo-600">
                 {reviewedArticles.length}
               </div>
             </CardContent>
           </Card>
-          <Card className="rounded-2xl shadow-sm">
+
+          <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm hover:shadow transition-all">
             <CardHeader className="pb-2 p-4">
-              <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
+              <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                 Published
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 pt-0">
-              <div className="text-2xl sm:text-3xl font-bold text-green-600">
+              <div className="text-3xl font-extrabold text-emerald-600">
                 {publishedCount}
               </div>
             </CardContent>
           </Card>
-          <Card className="rounded-2xl shadow-sm col-span-2 sm:col-span-1">
+
+          <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm hover:shadow transition-all col-span-2 sm:col-span-1">
             <CardHeader className="pb-2 p-4">
-              <CardTitle className="text-xs sm:text-sm font-medium text-gray-600">
+              <CardTitle className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                 Rejected
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 pt-0">
-              <div className="text-2xl sm:text-3xl font-bold text-red-600">
+              <div className="text-3xl font-extrabold text-rose-600">
                 {rejectedCount}
               </div>
             </CardContent>
           </Card>
         </div>
 
+        {/* Minimal Tabs */}
         <Tabs defaultValue="unassigned" className="space-y-6">
           <div className="overflow-x-auto pb-1">
-            <TabsList className="inline-flex h-auto p-1 bg-gray-100/80 rounded-xl space-x-1">
-              <TabsTrigger value="unassigned" className="rounded-lg text-xs sm:text-sm py-2 px-3">
+            <TabsList className="inline-flex h-auto p-1 bg-slate-200/60 rounded-xl space-x-1">
+              <TabsTrigger value="unassigned" className="rounded-lg text-xs font-bold py-2.5 px-4 text-slate-700 data-[state=active]:bg-white data-[state=active]:text-blue-600 shadow-none">
                 Unassigned ({unassignedArticles.length})
               </TabsTrigger>
-              <TabsTrigger value="reviewed" className="rounded-lg text-xs sm:text-sm py-2 px-3">
+              <TabsTrigger value="reviewed" className="rounded-lg text-xs font-bold py-2.5 px-4 text-slate-700 data-[state=active]:bg-white data-[state=active]:text-blue-600 shadow-none">
                 Reviewed ({reviewedArticles.length})
               </TabsTrigger>
-              <TabsTrigger value="reviewers" className="rounded-lg text-xs sm:text-sm py-2 px-3">
+              <TabsTrigger value="reviewers" className="rounded-lg text-xs font-bold py-2.5 px-4 text-slate-700 data-[state=active]:bg-white data-[state=active]:text-blue-600 shadow-none">
                 Reviewers ({reviewers.length})
               </TabsTrigger>
             </TabsList>
@@ -363,121 +377,122 @@ export default function SuperAdminDashboard() {
 
           {/* Unassigned Articles */}
           <TabsContent value="unassigned">
-            <Card className="rounded-2xl overflow-hidden shadow-sm">
-              <CardHeader>
-                <CardTitle>Unassigned Articles</CardTitle>
-                <CardDescription>
-                  Assign these articles to reviewers
+            <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm overflow-hidden">
+              <CardHeader className="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                <CardTitle className="text-base font-bold text-slate-900">Unassigned Articles</CardTitle>
+                <CardDescription className="text-xs text-slate-500">
+                  Assign pending manuscript submissions to editorial reviewers
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-0 sm:p-6">
+              <CardContent className="p-0">
                 <div className="overflow-x-auto w-full">
-                  <Table className="min-w-[700px]">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Author</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Tracking #</TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Submitted</TableHead>
-                        <TableHead>Actions</TableHead>
+                  <Table className="min-w-[750px]">
+                    <TableHeader className="bg-slate-50/80">
+                      <TableRow className="border-slate-100">
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Title</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Author</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tracking #</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Category</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Submitted</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
 
                     <TableBody>
                       {unassignedArticles.map((article) => (
-                        <TableRow key={article.id}>
-                          <TableCell className="font-medium max-w-[200px] truncate">
+                        <TableRow key={article.id} className="border-slate-100 hover:bg-blue-50/30 transition-colors">
+                          <TableCell className="font-semibold text-slate-900 max-w-[200px] truncate">
                             {article.title}
                           </TableCell>
 
-                          <TableCell>{article.author_name}</TableCell>
+                          <TableCell className="text-slate-700 text-xs">{article.author_name}</TableCell>
 
-                          <TableCell>{article.author_email}</TableCell>
+                          <TableCell className="text-slate-500 text-xs">{article.author_email}</TableCell>
 
-                          <TableCell className="font-mono text-sm">
+                          <TableCell className="font-mono text-xs text-blue-600 font-semibold">
                             {article.tracking_number}
                           </TableCell>
 
                           <TableCell>
-                            <Badge variant="outline">{article.category}</Badge>
+                            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-[11px] font-semibold">
+                              {article.category}
+                            </Badge>
                           </TableCell>
 
-                          <TableCell>
+                          <TableCell className="text-slate-500 text-xs">
                             {new Date(article.submitted_at).toLocaleDateString()}
                           </TableCell>
 
                           <TableCell>
-                            <div className="flex gap-2">
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => setSelectedArticle(article)}
-                                    className="rounded-lg"
-                                  >
-                                    <Eye className="h-4 w-4" />
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto rounded-2xl">
-                                  <DialogHeader>
-                                    <DialogTitle>{selectedArticle?.title}</DialogTitle>
-                                    <DialogDescription>
-                                      By {selectedArticle?.author_name} (
-                                      {selectedArticle?.author_email})<br />
-                                      Tracking #: {selectedArticle?.tracking_number}
-                                    </DialogDescription>
-                                  </DialogHeader>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setSelectedArticle(article)}
+                                  className="rounded-xl border-slate-200 text-slate-700 hover:bg-blue-50 hover:text-blue-600 text-xs font-semibold"
+                                >
+                                  <Eye className="h-4 w-4 mr-1.5" />
+                                  Inspect
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto rounded-3xl p-6 sm:p-8">
+                                <DialogHeader className="space-y-2 border-b border-slate-100 pb-4">
+                                  <DialogTitle className="text-xl font-extrabold text-slate-900">
+                                    {selectedArticle?.title}
+                                  </DialogTitle>
+                                  <DialogDescription className="text-xs text-slate-500">
+                                    Submitted by <strong className="text-slate-700">{selectedArticle?.author_name}</strong> ({selectedArticle?.author_email}) · Tracking: <span className="font-mono text-blue-600 font-bold">{selectedArticle?.tracking_number}</span>
+                                  </DialogDescription>
+                                </DialogHeader>
 
-                                  <div className="space-y-4">
-                                    <div>
-                                      <h4 className="font-semibold text-sm mb-1">Excerpt</h4>
-                                      <p className="text-gray-600 text-sm leading-relaxed">{selectedArticle?.excerpt}</p>
-                                    </div>
-
-                                    <div>
-                                      <h4 className="font-semibold text-sm mb-1">Full Content</h4>
-                                      <div
-                                        className="bg-gray-50 p-4 rounded-xl prose max-w-none text-sm leading-relaxed"
-                                        dangerouslySetInnerHTML={{
-                                          __html: selectedArticle?.content || "",
-                                        }}
-                                      />
-                                    </div>
-
-                                    <div className="space-y-2 pt-2 border-t">
-                                      <h4 className="font-semibold text-sm">Assign to Reviewer</h4>
-                                      <Select
-                                        value={selectedReviewer}
-                                        onValueChange={setSelectedReviewer}
-                                      >
-                                        <SelectTrigger className="rounded-xl">
-                                          <SelectValue placeholder="Select reviewer" />
-                                        </SelectTrigger>
-                                        <SelectContent className="rounded-xl">
-                                          {reviewers.map((r) => (
-                                            <SelectItem key={r.id} value={r.id.toString()}>
-                                              {r.name} ({r.email})
-                                            </SelectItem>
-                                          ))}
-                                        </SelectContent>
-                                      </Select>
-
-                                      <Button
-                                        onClick={() => handleAssign(selectedArticle!.id)}
-                                        disabled={isLoading || !selectedReviewer}
-                                        className="w-full rounded-xl"
-                                      >
-                                        <UserPlus className="h-4 w-4 mr-2" />
-                                        Assign Article
-                                      </Button>
-                                    </div>
+                                <div className="space-y-5 pt-4">
+                                  <div>
+                                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Abstract / Excerpt</h4>
+                                    <p className="text-slate-700 text-sm leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-200/80">{selectedArticle?.excerpt}</p>
                                   </div>
-                                </DialogContent>
-                              </Dialog>
-                            </div>
+
+                                  <div>
+                                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Full Manuscript</h4>
+                                    <div
+                                      className="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 prose max-w-none text-sm text-slate-700 leading-relaxed"
+                                      dangerouslySetInnerHTML={{
+                                        __html: selectedArticle?.content || "",
+                                      }}
+                                    />
+                                  </div>
+
+                                  <div className="space-y-3 pt-3 border-t border-slate-100">
+                                    <h4 className="text-sm font-bold text-slate-900">Assign to Peer Reviewer</h4>
+                                    <Select
+                                      value={selectedReviewer}
+                                      onValueChange={setSelectedReviewer}
+                                    >
+                                      <SelectTrigger className="rounded-xl border-slate-200">
+                                        <SelectValue placeholder="Select peer reviewer..." />
+                                      </SelectTrigger>
+                                      <SelectContent className="rounded-xl">
+                                        {reviewers.map((r) => (
+                                          <SelectItem key={r.id} value={r.id.toString()}>
+                                            {r.name} ({r.email})
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+
+                                    <Button
+                                      onClick={() => handleAssign(selectedArticle!.id)}
+                                      disabled={isLoading || !selectedReviewer}
+                                      className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold h-11"
+                                    >
+                                      <UserPlus className="h-4 w-4 mr-2" />
+                                      Confirm Assignment
+                                    </Button>
+                                  </div>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -490,62 +505,45 @@ export default function SuperAdminDashboard() {
 
           {/* Reviewed Articles */}
           <TabsContent value="reviewed">
-            <Card className="rounded-2xl overflow-hidden shadow-sm">
-              <CardHeader>
-                <CardTitle>Reviewed Articles</CardTitle>
-                <CardDescription>
-                  Articles reviewed by reviewers - Make final decision
+            <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm overflow-hidden">
+              <CardHeader className="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                <CardTitle className="text-base font-bold text-slate-900">Reviewed Articles</CardTitle>
+                <CardDescription className="text-xs text-slate-500">
+                  Articles evaluated by reviewers — Issue final editorial decision
                 </CardDescription>
               </CardHeader>
 
-              <CardContent className="p-0 sm:p-6">
+              <CardContent className="p-0">
                 <div className="overflow-x-auto w-full">
-                  <Table className="min-w-[800px]">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Author</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Tracking #</TableHead>
-                        <TableHead>Reviewer</TableHead>
-                        <TableHead>Remarks</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Actions</TableHead>
+                  <Table className="min-w-[850px]">
+                    <TableHeader className="bg-slate-50/80">
+                      <TableRow className="border-slate-100">
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Title</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Author</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Reviewer</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Remarks</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Status</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Decision</TableHead>
                       </TableRow>
                     </TableHeader>
 
                     <TableBody>
                       {reviewedArticles.map((assignment) => (
-                        <TableRow key={assignment.id}>
-                          <TableCell className="max-w-[180px] truncate">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <span className="cursor-pointer hover:underline font-medium">
-                                  {assignment.title}
-                                </span>
-                              </DialogTrigger>
-                              <DialogContent className="rounded-2xl">
-                                <DialogHeader>
-                                  <DialogTitle>Full Title</DialogTitle>
-                                </DialogHeader>
-                                <p className="whitespace-pre-wrap text-sm">{assignment.title}</p>
-                              </DialogContent>
-                            </Dialog>
+                        <TableRow key={assignment.id} className="border-slate-100 hover:bg-slate-50/40 transition-colors">
+                          <TableCell className="max-w-[180px] truncate font-semibold text-slate-900">
+                            {assignment.title}
                           </TableCell>
 
-                          <TableCell className="max-w-[160px] truncate">
+                          <TableCell className="max-w-[160px] truncate text-xs text-slate-700">
                             {assignment.author_name}
                           </TableCell>
 
-                          <TableCell className="max-w-[200px] truncate">
+                          <TableCell className="max-w-[180px] truncate text-xs text-slate-500">
                             {assignment.author_email}
                           </TableCell>
 
-                          <TableCell className="max-w-[130px] truncate font-mono text-xs">
-                            {assignment.tracking_number}
-                          </TableCell>
-
-                          <TableCell className="max-w-[160px] truncate">
+                          <TableCell className="max-w-[150px] truncate text-xs font-medium text-slate-700">
                             {assignment.reviewer_name}
                           </TableCell>
 
@@ -555,19 +553,19 @@ export default function SuperAdminDashboard() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="max-w-[180px] truncate text-left justify-start text-xs"
+                                  className="max-w-[180px] truncate text-left justify-start text-xs text-blue-600 hover:bg-blue-50 font-medium"
                                 >
                                   {assignment.reviewer_remarks}
                                 </Button>
                               </DialogTrigger>
-                              <DialogContent className="max-h-[80vh] overflow-y-auto rounded-2xl">
+                              <DialogContent className="max-h-[80vh] overflow-y-auto rounded-3xl p-6">
                                 <DialogHeader>
-                                  <DialogTitle>Reviewer Remarks</DialogTitle>
-                                  <DialogDescription>
+                                  <DialogTitle className="text-lg font-bold text-slate-900">Reviewer Feedback</DialogTitle>
+                                  <DialogDescription className="text-xs text-slate-500">
                                     Article: {assignment.title}
                                   </DialogDescription>
                                 </DialogHeader>
-                                <div className="bg-gray-50 p-4 rounded-xl max-h-[60vh] overflow-y-auto text-sm leading-relaxed">
+                                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-sm text-slate-700 leading-relaxed mt-2">
                                   <p className="whitespace-pre-wrap">{assignment.reviewer_remarks}</p>
                                 </div>
                               </DialogContent>
@@ -576,11 +574,11 @@ export default function SuperAdminDashboard() {
 
                           <TableCell>
                             {assignment.assignment_status === "approved" ? (
-                              <Badge className="bg-green-100 text-green-800">Approved</Badge>
+                              <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold">Approved</Badge>
                             ) : assignment.assignment_status === "rejected" ? (
-                              <Badge className="bg-red-100 text-red-800">Rejected</Badge>
+                              <Badge className="bg-rose-50 text-rose-700 border border-rose-200 text-[11px] font-semibold">Rejected</Badge>
                             ) : (
-                              <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+                              <Badge className="bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-semibold">Pending</Badge>
                             )}
                           </TableCell>
 
@@ -594,10 +592,10 @@ export default function SuperAdminDashboard() {
                                       onClick={() =>
                                         handleFinalDecision(assignment.submission_id, "approved")
                                       }
-                                      className="bg-green-600 hover:bg-green-700 rounded-lg"
+                                      className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold px-3"
                                       disabled={isLoading}
                                     >
-                                      <CheckCircle className="h-4 w-4" />
+                                      <CheckCircle className="h-4 w-4 mr-1" /> Publish
                                     </Button>
 
                                     <Button
@@ -607,16 +605,16 @@ export default function SuperAdminDashboard() {
                                         handleFinalDecision(assignment.submission_id, "rejected")
                                       }
                                       disabled={isLoading}
-                                      className="rounded-lg"
+                                      className="rounded-xl text-xs font-semibold px-3"
                                     >
-                                      <XCircle className="h-4 w-4" />
+                                      <XCircle className="h-4 w-4 mr-1" /> Reject
                                     </Button>
                                   </>
                                 )}
 
                               {(assignment.assignment_status === "approved" ||
                                 assignment.assignment_status === "rejected") && (
-                                <span className="text-xs text-gray-500 font-medium">Decision made</span>
+                                <span className="text-xs text-slate-400 font-medium">Finalized</span>
                               )}
                             </div>
                           </TableCell>
@@ -627,8 +625,8 @@ export default function SuperAdminDashboard() {
                 </div>
 
                 {reviewedArticles.length === 0 && (
-                  <div className="text-center py-8 text-gray-500 text-sm">
-                    No reviewed articles yet
+                  <div className="text-center py-10 text-slate-400 text-xs">
+                    No reviewed articles currently awaiting final decision
                   </div>
                 )}
               </CardContent>
@@ -637,30 +635,32 @@ export default function SuperAdminDashboard() {
 
           {/* Reviewers List */}
           <TabsContent value="reviewers">
-            <Card className="rounded-2xl overflow-hidden shadow-sm">
-              <CardHeader>
-                <CardTitle>Reviewers</CardTitle>
-                <CardDescription>All registered reviewers</CardDescription>
+            <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm overflow-hidden">
+              <CardHeader className="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+                <CardTitle className="text-base font-bold text-slate-900">Reviewers Directory</CardTitle>
+                <CardDescription className="text-xs text-slate-500">All active registered peer reviewers</CardDescription>
               </CardHeader>
-              <CardContent className="p-0 sm:p-6">
+              <CardContent className="p-0">
                 <div className="overflow-x-auto w-full">
                   <Table className="min-w-[500px]">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Role</TableHead>
+                    <TableHeader className="bg-slate-50/80">
+                      <TableRow className="border-slate-100">
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Name</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email</TableHead>
+                        <TableHead className="text-xs font-bold text-slate-500 uppercase tracking-wider">Role</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {reviewers.map((reviewer) => (
-                        <TableRow key={reviewer.id}>
-                          <TableCell className="font-medium">
+                        <TableRow key={reviewer.id} className="border-slate-100">
+                          <TableCell className="font-semibold text-slate-900 text-sm">
                             {reviewer.name}
                           </TableCell>
-                          <TableCell>{reviewer.email}</TableCell>
+                          <TableCell className="text-slate-600 text-xs">{reviewer.email}</TableCell>
                           <TableCell>
-                            <Badge className="rounded-full">{reviewer.role}</Badge>
+                            <Badge className="bg-slate-100 text-slate-700 border border-slate-200 text-[10px] uppercase font-bold tracking-wider rounded-lg">
+                              {reviewer.role}
+                            </Badge>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -671,6 +671,7 @@ export default function SuperAdminDashboard() {
             </Card>
           </TabsContent>
         </Tabs>
+
       </div>
     </div>
   );

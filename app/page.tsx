@@ -42,25 +42,25 @@ export default function HomePage() {
     <div className="min-h-screen bg-white text-slate-800 font-sans antialiased selection:bg-blue-600 selection:text-white">
       
       {/* ==================== SIMPLE SLEEK HEADER WITH DROPDOWN ==================== */}
-      <header className="border-b border-slate-100 bg-white/95 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="flex justify-between items-center h-20">
+      <header className="border-b border-slate-200/80 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16 sm:h-20 gap-2 sm:gap-4">
             
             {/* Logo + Title */}
-            <Link href="/" className="flex items-center gap-3 group">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0">
               <img
                 src="/logo.png"
                 alt="The College Periodical Logo"
-                className="h-12 w-12 sm:h-14 sm:w-14 object-contain transition-transform group-hover:scale-105"
+                className="h-10 w-10 sm:h-12 sm:w-12 object-contain transition-transform group-hover:scale-105 flex-shrink-0"
                 onError={(e) => {
                   e.currentTarget.style.display = "none"
                 }}
               />
-              <div>
-                <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors">
+              <div className="min-w-0">
+                <h1 className="text-sm sm:text-xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors leading-tight truncate">
                   The College Periodical
                 </h1>
-                <p className="text-[11px] text-blue-600 font-semibold uppercase tracking-wider">
+                <p className="text-[9px] sm:text-xs text-blue-600 font-semibold uppercase tracking-wider truncate leading-tight">
                   Academic Student Journal
                 </p>
               </div>

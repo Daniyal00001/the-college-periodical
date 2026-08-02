@@ -1,5 +1,7 @@
 "use client"
 
+import NavbarHeader from "@/components/NavbarHeader"
+
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { UserPlus, Eye, EyeOff, ArrowLeft, ShieldCheck, Check, X, UserCheck, Sparkles } from "lucide-react"
@@ -57,38 +59,11 @@ export default function SignupPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50/50 to-gray-100 flex flex-col justify-between text-gray-800 font-sans">
       
       {/* HEADER NAVBAR (Matching Website Theme) */}
-      <header className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <Link href="/" className="flex items-center gap-3 group">
-              <img
-                src="/logo.png"
-                alt="The College Periodical Logo"
-                className="h-16 w-16 sm:h-20 sm:w-20 object-contain transition-transform group-hover:scale-105"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none"
-                }}
-              />
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight group-hover:text-blue-600 transition-colors">
-                  The College Periodical
-                </h1>
-                <p className="text-xs text-blue-700 font-medium">Reviewer Account Onboarding</p>
-              </div>
-            </Link>
-
-            <Link href="/">
-              <Button
-                variant="outline"
-                className="rounded-xl border-gray-300 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-all font-medium"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Home
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <NavbarHeader
+        subtitle="Reviewer Account Onboarding"
+        backUrl="/"
+        backText="Home"
+      />
 
       {/* MAIN CONTAINER */}
       <main className="flex-1 flex items-center justify-center p-4 py-12">

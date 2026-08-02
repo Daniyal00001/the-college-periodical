@@ -244,30 +244,30 @@ export default function SuperAdminDashboard() {
       {/* ==================== STANDARDIZED HEADER NAVBAR ==================== */}
       <header className="border-b border-slate-200/80 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+          <div className="flex justify-between items-center py-3 sm:py-0 min-h-[4rem] sm:h-20 gap-2 sm:gap-4">
             
             {/* Logo + Title */}
-            <Link href="/" className="flex items-center gap-3 group min-w-0">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0">
               <img
                 src="/logo.png"
                 alt="The College Periodical Logo"
-                className="h-12 w-12 sm:h-14 sm:w-14 object-contain transition-transform group-hover:scale-105 flex-shrink-0"
+                className="h-10 w-10 sm:h-14 sm:w-14 object-contain transition-transform group-hover:scale-105 flex-shrink-0"
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
                 }}
               />
               <div className="min-w-0">
-                <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors truncate">
+                <h1 className="text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors leading-tight truncate">
                   The College Periodical
                 </h1>
-                <p className="text-[11px] text-blue-600 font-semibold uppercase tracking-wider truncate">
+                <p className="text-[9px] sm:text-[11px] text-blue-600 font-semibold uppercase tracking-wider truncate leading-tight">
                   Super Admin Editorial Portal
                 </p>
               </div>
             </Link>
 
             {/* Right Action: User Info & Logout Pill Button */}
-            <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
               {user && (
                 <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50 text-blue-800 text-xs font-semibold border border-blue-100">
                   <ShieldCheck className="h-4 w-4 text-blue-600" />
@@ -277,9 +277,9 @@ export default function SuperAdminDashboard() {
               <Button
                 variant="outline"
                 onClick={handleLogout}
-                className="rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-sm h-10 px-4"
+                className="rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-xs sm:text-sm h-8 sm:h-10 px-2.5 sm:px-4"
               >
-                <LogOut className="h-4 w-4 mr-2 text-slate-500" />
+                <LogOut className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2 text-slate-500" />
                 Logout
               </Button>
             </div>

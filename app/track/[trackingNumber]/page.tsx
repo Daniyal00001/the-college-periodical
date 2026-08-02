@@ -97,23 +97,33 @@ export default function TrackingPage() {
   if (error || !submission) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <header className="border-b bg-white shadow-sm">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <Link href="/" className="flex items-center">
+        <header className="border-b border-slate-100 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="flex justify-between items-center py-3 sm:py-0 min-h-[4rem] sm:h-20 gap-2 sm:gap-4">
+              <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0">
                 <img
                   src="/logo.png"
                   alt="The College Periodical Logo"
-                  className="h-12 w-12 sm:h-16 sm:w-16 mr-3 object-contain hover:scale-105 transition-transform"
+                  className="h-10 w-10 sm:h-14 sm:w-14 object-contain transition-transform group-hover:scale-105 flex-shrink-0"
                   onError={(e) => {
                     e.currentTarget.style.display = "none"
                   }}
                 />
-                <h1 className="text-xl font-bold text-gray-900">The College Periodical</h1>
+                <div className="min-w-0">
+                  <h1 className="text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors leading-tight truncate">
+                    The College Periodical
+                  </h1>
+                  <p className="text-[9px] sm:text-[11px] text-blue-600 font-semibold uppercase tracking-wider truncate leading-tight">
+                    Submission Tracking Portal
+                  </p>
+                </div>
               </Link>
-              <Link href="/">
-                <Button variant="outline">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
+              <Link href="/" className="flex-shrink-0">
+                <Button
+                  variant="outline"
+                  className="rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-xs sm:text-sm h-8 sm:h-10 px-2.5 sm:px-4"
+                >
+                  <ArrowLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                   Home
                 </Button>
               </Link>
@@ -147,23 +157,33 @@ export default function TrackingPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-white shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
+      <header className="border-b border-slate-100 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex justify-between items-center py-3 sm:py-0 min-h-[4rem] sm:h-20 gap-2 sm:gap-4">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group min-w-0">
               <img
                 src="/logo.png"
                 alt="The College Periodical Logo"
-                className="h-12 w-12 sm:h-16 sm:w-16 mr-3 object-contain hover:scale-105 transition-transform"
+                className="h-10 w-10 sm:h-14 sm:w-14 object-contain transition-transform group-hover:scale-105 flex-shrink-0"
                 onError={(e) => {
                   e.currentTarget.style.display = "none"
                 }}
               />
-              <h1 className="text-xl font-bold text-gray-900">The College Periodical</h1>
+              <div className="min-w-0">
+                <h1 className="text-sm sm:text-2xl font-extrabold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors leading-tight truncate">
+                  The College Periodical
+                </h1>
+                <p className="text-[9px] sm:text-[11px] text-blue-600 font-semibold uppercase tracking-wider truncate leading-tight">
+                  Submission Tracking Portal
+                </p>
+              </div>
             </Link>
-            <Link href="/">
-              <Button variant="outline">
-                <ArrowLeft className="h-4 w-4 mr-2" />
+            <Link href="/" className="flex-shrink-0">
+              <Button
+                variant="outline"
+                className="rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-xs sm:text-sm h-8 sm:h-10 px-2.5 sm:px-4"
+              >
+                <ArrowLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                 Home
               </Button>
             </Link>

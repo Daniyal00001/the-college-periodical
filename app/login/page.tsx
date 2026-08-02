@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { LogIn, Eye, EyeOff, ArrowLeft, ShieldCheck, Lock, Sparkles } from "lucide-react"
+import { LogIn, Eye, EyeOff, ArrowLeft, ShieldCheck, UserCheck, KeyRound, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,6 +16,11 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+
+  const autofill = (email: string, pass: string) => {
+    setFormData({ email, password: pass })
+    setError("")
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -128,6 +133,58 @@ export default function LoginPage() {
                 </p>
               </div>
 
+              {/* DEMO CREDENTIALS BOX */}
+              <div className="p-4 rounded-2xl bg-blue-50/80 border border-blue-200/80 space-y-2 text-xs">
+                <div className="flex items-center justify-between font-bold text-blue-900">
+                  <span className="flex items-center gap-1.5">
+                    <KeyRound className="h-3.5 w-3.5 text-blue-600" /> Quick Demo Credentials
+                  </span>
+                  <span className="text-[10px] bg-blue-200/60 px-2 py-0.5 rounded-full text-blue-800 uppercase tracking-wider font-semibold">
+                    Recruiter Preview
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                  
+                  {/* Reviewer Demo */}
+                  <div className="p-2.5 rounded-xl bg-white border border-blue-100 space-y-1">
+                    <div className="font-bold text-slate-800 flex items-center justify-between">
+                      <span>Reviewer</span>
+                      <button
+                        type="button"
+                        onClick={() => autofill("reviewer@gmail.com", "Reviewer@123")}
+                        className="text-[10px] font-bold text-blue-600 hover:underline"
+                      >
+                        Fill ↓
+                      </button>
+                    </div>
+                    <div className="text-[11px] text-slate-600">
+                      <p><span className="font-medium text-slate-400">Email:</span> reviewer@gmail.com</p>
+                      <p><span className="font-medium text-slate-400">Pass:</span> Reviewer@123</p>
+                    </div>
+                  </div>
+
+                  {/* Super Admin Demo */}
+                  <div className="p-2.5 rounded-xl bg-white border border-indigo-100 space-y-1">
+                    <div className="font-bold text-slate-800 flex items-center justify-between">
+                      <span>Super Admin</span>
+                      <button
+                        type="button"
+                        onClick={() => autofill("admin@gmail.com", "Admin@123")}
+                        className="text-[10px] font-bold text-indigo-600 hover:underline"
+                      >
+                        Fill ↓
+                      </button>
+                    </div>
+                    <div className="text-[11px] text-slate-600">
+                      <p><span className="font-medium text-slate-400">Email:</span> admin@gmail.com</p>
+                      <p><span className="font-medium text-slate-400">Pass:</span> Admin@123</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
               {/* Error Banner */}
               {error && (
                 <motion.div
@@ -154,7 +211,7 @@ export default function LoginPage() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     required
-                    className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 rounded-xl h-12 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all shadow-sm"
+                    className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 rounded-xl h-12 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all shadow-sm text-sm"
                   />
                 </div>
 
@@ -173,7 +230,7 @@ export default function LoginPage() {
                       value={formData.password}
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                       required
-                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 rounded-xl h-12 pr-11 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all shadow-sm"
+                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 rounded-xl h-12 pr-11 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all shadow-sm text-sm"
                     />
                     <button
                       type="button"
